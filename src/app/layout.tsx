@@ -6,8 +6,8 @@ import { ThemeProvider } from '@/contexts/ThemeContext'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Kuest - Interactive Quiz & Form Builder',
-  description: 'Create engaging quizzes and forms with Kuest. Build interactive questionnaires with auto-scoring and beautiful 3D animations.',
+  title: 'Fac Systems - Development Portfolio',
+  description: 'Innovative web applications and tools designed to solve real-world problems. Explore Quest and other cutting-edge projects.',
 }
 
 export default function RootLayout({

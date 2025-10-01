@@ -11,31 +11,31 @@ function FloatingShape({ position, shape, color }: { position: [number, number, 
 
   useFrame((state) => {
     if (meshRef.current) {
-      meshRef.current.rotation.x = state.clock.elapsedTime * 0.2;
-      meshRef.current.rotation.y = state.clock.elapsedTime * 0.3;
-      meshRef.current.position.y = position[1] + Math.sin(state.clock.elapsedTime + position[0]) * 0.5;
+      meshRef.current.rotation.x = state.clock.elapsedTime * 0.1;
+      meshRef.current.rotation.y = state.clock.elapsedTime * 0.15;
+      meshRef.current.position.y = position[1] + Math.sin(state.clock.elapsedTime + position[0]) * 0.3;
     }
   });
 
   const renderShape = () => {
     switch (shape) {
       case 'sphere':
-        return <Sphere ref={meshRef} args={[0.5, 32, 32]} position={position} />;
+        return <Sphere ref={meshRef} args={[0.5, 16, 16]} position={position} />;
       case 'box':
         return <Box ref={meshRef} args={[0.8, 0.8, 0.8]} position={position} />;
       case 'torus':
-        return <Torus ref={meshRef} args={[0.4, 0.2, 16, 32]} position={position} />;
+        return <Torus ref={meshRef} args={[0.4, 0.2, 8, 16]} position={position} />;
       case 'octahedron':
         return <Octahedron ref={meshRef} args={[0.6]} position={position} />;
       default:
-        return <Sphere ref={meshRef} args={[0.5, 32, 32]} position={position} />;
+        return <Sphere ref={meshRef} args={[0.5, 16, 16]} position={position} />;
     }
   };
 
   return (
     <mesh>
       {renderShape()}
-      <meshStandardMaterial color={color} transparent opacity={0.3} />
+      <meshStandardMaterial color={color} transparent opacity={0.2} />
     </mesh>
   );
 }
@@ -52,10 +52,10 @@ export default function FloatingShapes3D() {
 
   return (
     <div className="absolute inset-0 pointer-events-none">
-      <Canvas camera={{ position: [0, 0, 5], fov: 75 }}>
-        <ambientLight intensity={0.4} />
-        <directionalLight position={[10, 10, 5]} intensity={0.6} />
-        <pointLight position={[-10, -10, -5]} intensity={0.3} color="#22c55e" />
+      <Canvas camera={{ position: [0, 0, 5], fov: 75 }} performance={{ min: 0.5 }}>
+        <ambientLight intensity={0.3} />
+        <directionalLight position={[10, 10, 5]} intensity={0.4} />
+        <pointLight position={[-10, -10, -5]} intensity={0.2} color="#22c55e" />
         
         {shapes.map((shape, index) => (
           <FloatingShape
@@ -66,7 +66,7 @@ export default function FloatingShapes3D() {
           />
         ))}
         
-        <OrbitControls enableZoom={false} enablePan={false} autoRotate autoRotateSpeed={0.5} />
+        <OrbitControls enableZoom={false} enablePan={false} autoRotate autoRotateSpeed={0.3} />
       </Canvas>
     </div>
   );
