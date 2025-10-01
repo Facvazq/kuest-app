@@ -1,13 +1,21 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
-import { ArrowRight, Code, Zap, Sparkles, ExternalLink, X } from 'lucide-react';
+import { ArrowRight, Code, Zap, Sparkles, ExternalLink, X, ChevronDown, Gamepad2, Smartphone } from 'lucide-react';
 import FloatingShapes3D from '@/components/FloatingShapes3D';
 
 export default function HomePage() {
   const [showContactPopup, setShowContactPopup] = useState(false);
+  const projectsRef = useRef<HTMLDivElement>(null);
+
+  const scrollToProjects = () => {
+    projectsRef.current?.scrollIntoView({ 
+      behavior: 'smooth',
+      block: 'start'
+    });
+  };
 
   return (
     <div className="min-h-screen kuest-hero-bg relative overflow-hidden">
@@ -130,22 +138,38 @@ export default function HomePage() {
             transition={{ duration: 0.8, delay: 0.6 }}
             className="flex flex-col sm:flex-row gap-6 justify-center items-center"
           >
-            <Link href="/dashboard">
-              <motion.button
-                whileHover={{ scale: 1.05, y: -2 }}
-                whileTap={{ scale: 0.95 }}
-                className="kuest-gradient text-white px-8 py-4 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 text-lg flex items-center space-x-2 kuest-glow-hover"
-              >
-                <span>Explore Projects</span>
-                <ArrowRight className="w-5 h-5" />
-              </motion.button>
-            </Link>
+            <motion.button
+              whileHover={{ scale: 1.05, y: -2 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={scrollToProjects}
+              className="kuest-gradient text-white px-8 py-4 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 text-lg flex items-center space-x-2 kuest-glow-hover"
+            >
+              <span>Explore Projects</span>
+              <ArrowRight className="w-5 h-5" />
+            </motion.button>
           </motion.div>
         </motion.div>
       </div>
 
+      {/* Scroll Arrow */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, delay: 1.0 }}
+        className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-10"
+      >
+        <motion.button
+          onClick={scrollToProjects}
+          animate={{ y: [0, 10, 0] }}
+          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+          className="text-white/70 hover:text-white transition-colors"
+        >
+          <ChevronDown className="w-8 h-8" />
+        </motion.button>
+      </motion.div>
+
       {/* Projects Section */}
-      <div className="relative z-10 container mx-auto px-6 py-20">
+      <div ref={projectsRef} className="relative z-10 container mx-auto px-6 py-20">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
@@ -161,118 +185,229 @@ export default function HomePage() {
             </p>
           </div>
 
-          {/* Quest Project Card */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 1.0 }}
-            className="kuest-glass rounded-3xl p-8 mb-8 kuest-3d-hover"
-          >
-            <div className="flex flex-col lg:flex-row items-center gap-8">
-              <div className="flex-1">
-                <div className="flex items-center space-x-3 mb-4">
-                  <div className="w-12 h-12 bg-gradient-to-r from-kuest-green to-kuest-green-dark rounded-xl flex items-center justify-center">
-                    <Zap className="w-6 h-6 text-white" />
+          <div className="space-y-8">
+            {/* Quest Project Card */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 1.0 }}
+              className="kuest-glass rounded-3xl p-8 kuest-3d-hover"
+            >
+              <div className="flex flex-col lg:flex-row items-center gap-8">
+                <div className="flex-1">
+                  <div className="flex items-center space-x-3 mb-4">
+                    <div className="w-12 h-12 bg-gradient-to-r from-kuest-green to-kuest-green-dark rounded-xl flex items-center justify-center">
+                      <Zap className="w-6 h-6 text-white" />
+                    </div>
+                    <h3 className="text-3xl font-bold text-white">Quest</h3>
+                    <span className="px-3 py-1 bg-kuest-green/20 text-kuest-green-light rounded-full text-sm font-medium">
+                      Latest
+                    </span>
                   </div>
-                  <h3 className="text-3xl font-bold text-white">Quest</h3>
-                  <span className="px-3 py-1 bg-kuest-green/20 text-kuest-green-light rounded-full text-sm font-medium">
-                    Latest
-                  </span>
-                </div>
-                
-                <p className="text-lg text-white/80 mb-6 leading-relaxed">
-                  A powerful quiz and form creation platform that revolutionizes how educators, businesses, and content creators 
-                  build interactive assessments. Features intelligent auto-scoring, real-time analytics, beautiful themes, and 
-                  seamless user experience. Perfect for online learning, employee training, market research, and engaging content creation.
-                </p>
+                  
+                  <p className="text-lg text-white/80 mb-6 leading-relaxed">
+                    A powerful quiz and form creation platform that revolutionizes how educators, businesses, and content creators 
+                    build interactive assessments. Features intelligent auto-scoring, real-time analytics, beautiful themes, and 
+                    seamless user experience. Perfect for online learning, employee training, market research, and engaging content creation.
+                  </p>
 
-                <div className="flex flex-wrap gap-3 mb-6">
-                  {['Auto-Scoring', 'Real-time Analytics', 'Multiple Question Types', 'Beautiful Themes', '3D Animations', 'Responsive Design'].map((feature) => (
-                    <motion.span 
-                      key={feature}
-                      initial={{ opacity: 0, scale: 0.8 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      transition={{ delay: 1.1 + Math.random() * 0.3 }}
-                      whileHover={{ scale: 1.05, y: -2 }}
-                      className="px-3 py-1 bg-white/10 text-white/90 rounded-lg text-sm kuest-glow-hover transition-all duration-300"
-                    >
-                      {feature}
-                    </motion.span>
-                  ))}
+                  <div className="flex flex-wrap gap-3 mb-6">
+                    {['Auto-Scoring', 'Real-time Analytics', 'Multiple Question Types', 'Beautiful Themes', '3D Animations', 'Responsive Design'].map((feature) => (
+                      <motion.span 
+                        key={feature}
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ delay: 1.1 + Math.random() * 0.3 }}
+                        whileHover={{ scale: 1.05, y: -2 }}
+                        className="px-3 py-1 bg-white/10 text-white/90 rounded-lg text-sm kuest-glow-hover transition-all duration-300"
+                      >
+                        {feature}
+                      </motion.span>
+                    ))}
+                  </div>
+
+                  <div className="flex flex-col sm:flex-row gap-4">
+                    <Link href="/dashboard">
+                      <motion.button
+                        whileHover={{ scale: 1.05, y: -2 }}
+                        whileTap={{ scale: 0.95 }}
+                        className="kuest-gradient text-white px-6 py-3 rounded-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 flex items-center space-x-2 kuest-glow-hover"
+                      >
+                        <span>Launch Quest</span>
+                        <ExternalLink className="w-4 h-4" />
+                      </motion.button>
+                    </Link>
+                  </div>
                 </div>
 
-                <div className="flex flex-col sm:flex-row gap-4">
-                  <Link href="/dashboard">
+                <div className="flex-1 max-w-md">
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.8, delay: 1.2 }}
+                    className="kuest-glass rounded-2xl p-6 kuest-3d-float"
+                  >
+                    <div className="space-y-4">
+                      <div className="flex items-center space-x-2">
+                        <Sparkles className="w-5 h-5 text-kuest-green-light" />
+                        <span className="text-white font-medium">Key Features</span>
+                      </div>
+                      <ul className="space-y-3 text-white/80">
+                        {[
+                          { icon: "🎯", text: "Interactive Quiz Builder" },
+                          { icon: "⚡", text: "Intelligent Auto-Scoring" },
+                          { icon: "📊", text: "Real-time Analytics" },
+                          { icon: "🎨", text: "Beautiful Themes" },
+                          { icon: "📱", text: "Mobile Responsive" },
+                          { icon: "🔒", text: "Secure & Private" }
+                        ].map((item, index) => (
+                          <motion.li 
+                            key={index}
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: 1.4 + index * 0.1 }}
+                            className="flex items-center space-x-3"
+                          >
+                            <motion.span 
+                              className="text-lg"
+                              animate={{ 
+                                rotate: [0, 10, -10, 0],
+                                scale: [1, 1.1, 1]
+                              }}
+                              transition={{ 
+                                duration: 2,
+                                repeat: Infinity,
+                                delay: index * 0.2
+                              }}
+                            >
+                              {item.icon}
+                            </motion.span>
+                            <span>{item.text}</span>
+                          </motion.li>
+                        ))}
+                      </ul>
+                    </div>
+                  </motion.div>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Track Cleared Project Card */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 1.6 }}
+              className="kuest-glass rounded-3xl p-8 kuest-3d-hover"
+            >
+              <div className="flex flex-col lg:flex-row items-center gap-8">
+                <div className="flex-1">
+                  <div className="flex items-center space-x-3 mb-4">
+                    <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
+                      <Gamepad2 className="w-6 h-6 text-white" />
+                    </div>
+                    <h3 className="text-3xl font-bold text-white">Track Cleared</h3>
+                    <span className="px-3 py-1 bg-orange-500/20 text-orange-400 rounded-full text-sm font-medium">
+                      Work In Progress
+                    </span>
+                  </div>
+                  
+                  <p className="text-lg text-white/80 mb-6 leading-relaxed">
+                    An innovative mobile game that combines strategy and action elements. Players navigate through challenging tracks, 
+                    clearing obstacles and collecting rewards. Features stunning graphics, intuitive controls, and engaging gameplay mechanics. 
+                    Built for both iOS and Android platforms with cross-platform compatibility.
+                  </p>
+
+                  <div className="flex flex-wrap gap-3 mb-6">
+                    {['Game', 'Marshall', 'iOS', 'Android'].map((tag) => (
+                      <motion.span 
+                        key={tag}
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ delay: 1.7 + Math.random() * 0.3 }}
+                        whileHover={{ scale: 1.05, y: -2 }}
+                        className={`px-3 py-1 rounded-lg text-sm kuest-glow-hover transition-all duration-300 ${
+                          tag === 'Game' ? 'bg-blue-500/20 text-blue-300' :
+                          tag === 'Marshall' ? 'bg-purple-500/20 text-purple-300' :
+                          tag === 'iOS' ? 'bg-gray-500/20 text-gray-300' :
+                          'bg-green-500/20 text-green-300'
+                        }`}
+                      >
+                        {tag}
+                      </motion.span>
+                    ))}
+                  </div>
+
+                  <div className="flex flex-col sm:flex-row gap-4">
                     <motion.button
                       whileHover={{ scale: 1.05, y: -2 }}
                       whileTap={{ scale: 0.95 }}
-                      className="kuest-gradient text-white px-6 py-3 rounded-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 flex items-center space-x-2 kuest-glow-hover"
+                      className="bg-white/10 backdrop-blur-md text-white px-6 py-3 rounded-lg font-semibold border border-white/20 hover:bg-white/20 transition-all duration-300 flex items-center space-x-2"
                     >
-                      <span>Launch Quest</span>
-                      <ExternalLink className="w-4 h-4" />
+                      <Smartphone className="w-4 h-4" />
+                      <span>Coming Soon</span>
                     </motion.button>
-                  </Link>
+                  </div>
+                </div>
+
+                <div className="flex-1 max-w-md">
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.8, delay: 1.8 }}
+                    className="kuest-glass rounded-2xl p-6 kuest-3d-float"
+                  >
+                    <div className="space-y-4">
+                      <div className="flex items-center space-x-2">
+                        <Gamepad2 className="w-5 h-5 text-blue-400" />
+                        <span className="text-white font-medium">Game Features</span>
+                      </div>
+                      <ul className="space-y-3 text-white/80">
+                        {[
+                          { icon: "🎮", text: "Strategic Gameplay" },
+                          { icon: "🏁", text: "Track Clearing Mechanics" },
+                          { icon: "🏆", text: "Reward System" },
+                          { icon: "📱", text: "Cross-Platform" },
+                          { icon: "🎨", text: "Stunning Graphics" },
+                          { icon: "⚡", text: "Intuitive Controls" }
+                        ].map((item, index) => (
+                          <motion.li 
+                            key={index}
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: 2.0 + index * 0.1 }}
+                            className="flex items-center space-x-3"
+                          >
+                            <motion.span 
+                              className="text-lg"
+                              animate={{ 
+                                rotate: [0, 10, -10, 0],
+                                scale: [1, 1.1, 1]
+                              }}
+                              transition={{ 
+                                duration: 2,
+                                repeat: Infinity,
+                                delay: index * 0.2
+                              }}
+                            >
+                              {item.icon}
+                            </motion.span>
+                            <span>{item.text}</span>
+                          </motion.li>
+                        ))}
+                      </ul>
+                    </div>
+                  </motion.div>
                 </div>
               </div>
-
-              <div className="flex-1 max-w-md">
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.8, delay: 1.2 }}
-                  className="kuest-glass rounded-2xl p-6 kuest-3d-float"
-                >
-                  <div className="space-y-4">
-                    <div className="flex items-center space-x-2">
-                      <Sparkles className="w-5 h-5 text-kuest-green-light" />
-                      <span className="text-white font-medium">Key Features</span>
-                    </div>
-                    <ul className="space-y-3 text-white/80">
-                      {[
-                        { icon: "🎯", text: "Interactive Quiz Builder" },
-                        { icon: "⚡", text: "Intelligent Auto-Scoring" },
-                        { icon: "📊", text: "Real-time Analytics" },
-                        { icon: "🎨", text: "Beautiful Themes" },
-                        { icon: "📱", text: "Mobile Responsive" },
-                        { icon: "🔒", text: "Secure & Private" }
-                      ].map((item, index) => (
-                        <motion.li 
-                          key={index}
-                          initial={{ opacity: 0, x: -20 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          transition={{ delay: 1.4 + index * 0.1 }}
-                          className="flex items-center space-x-3"
-                        >
-                          <motion.span 
-                            className="text-lg"
-                            animate={{ 
-                              rotate: [0, 10, -10, 0],
-                              scale: [1, 1.1, 1]
-                            }}
-                            transition={{ 
-                              duration: 2,
-                              repeat: Infinity,
-                              delay: index * 0.2
-                            }}
-                          >
-                            {item.icon}
-                          </motion.span>
-                          <span>{item.text}</span>
-                        </motion.li>
-                      ))}
-                    </ul>
-                  </div>
-                </motion.div>
-              </div>
-            </div>
-          </motion.div>
+            </motion.div>
+          </div>
 
           {/* Coming Soon Section */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 1.4 }}
-            className="kuest-glass rounded-3xl p-8 text-center"
+            transition={{ duration: 0.8, delay: 2.2 }}
+            className="kuest-glass rounded-3xl p-8 text-center mt-8"
           >
             <div className="max-w-2xl mx-auto">
               <motion.h3 
@@ -317,7 +452,7 @@ export default function HomePage() {
       <motion.footer
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 0.8, delay: 1.6 }}
+        transition={{ duration: 0.8, delay: 2.4 }}
         className="relative z-10 container mx-auto px-6 py-12 text-center"
       >
         <div className="kuest-glass rounded-2xl p-8 max-w-2xl mx-auto">
@@ -346,7 +481,7 @@ export default function HomePage() {
             <motion.button
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 1.8 }}
+              transition={{ delay: 2.6 }}
               whileHover={{ 
                 scale: 1.1, 
                 y: -2,
