@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import { ArrowRight, Code, Zap, Sparkles, ExternalLink, X, ChevronDown, Gamepad2, Smartphone } from 'lucide-react';
@@ -8,6 +8,7 @@ import FloatingShapes3D from '@/components/FloatingShapes3D';
 
 export default function HomePage() {
   const [showContactPopup, setShowContactPopup] = useState(false);
+  const [showScrollArrow, setShowScrollArrow] = useState(true);
   const projectsRef = useRef<HTMLDivElement>(null);
 
   const scrollToProjects = () => {
@@ -16,6 +17,19 @@ export default function HomePage() {
       block: 'start'
     });
   };
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (projectsRef.current) {
+        const rect = projectsRef.current.getBoundingClientRect();
+        // Hide arrow when projects section is in view
+        setShowScrollArrow(rect.top > window.innerHeight * 0.5);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   return (
     <div className="min-h-screen kuest-hero-bg relative overflow-hidden">
@@ -151,22 +165,27 @@ export default function HomePage() {
         </motion.div>
       </div>
 
-      {/* Scroll Arrow */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 1.0 }}
-        className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-10"
-      >
-        <motion.button
-          onClick={scrollToProjects}
-          animate={{ y: [0, 10, 0] }}
-          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-          className="text-white/70 hover:text-white transition-colors"
-        >
-          <ChevronDown className="w-8 h-8" />
-        </motion.button>
-      </motion.div>
+      {/* Scroll Arrow - Fixed Position */}
+      <AnimatePresence>
+        {showScrollArrow && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 20 }}
+            transition={{ duration: 0.8, delay: 1.0 }}
+            className="fixed bottom-8 left-1/2 transform -translate-x-1/2 z-20"
+          >
+            <motion.button
+              onClick={scrollToProjects}
+              animate={{ y: [0, 10, 0] }}
+              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+              className="text-white/70 hover:text-white transition-colors bg-black/20 backdrop-blur-sm rounded-full p-3 border border-white/20"
+            >
+              <ChevronDown className="w-6 h-6" />
+            </motion.button>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Projects Section */}
       <div ref={projectsRef} className="relative z-10 container mx-auto px-6 py-20">
