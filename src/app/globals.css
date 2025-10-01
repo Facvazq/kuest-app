@@ -1,0 +1,174 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 142 76% 36%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96%;
+    --secondary-foreground: 222.2 84% 4.9%;
+    --muted: 210 40% 96%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 142 76% 36%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 142 76% 36%;
+    --radius: 0.5rem;
+    --kuest-green: 142 76% 36%;
+    --kuest-green-dark: 142 69% 58%;
+    --kuest-black: 0 0% 0%;
+  }
+
+  .dark {
+    --background: 0 0% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 0 0% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 0 0% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 142 76% 36%;
+    --primary-foreground: 0 0% 4.9%;
+    --secondary: 0 0% 14.9%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 0 0% 14.9%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 142 76% 36%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 0 0% 14.9%;
+    --input: 0 0% 14.9%;
+    --ring: 142 76% 36%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-gray-200 dark:border-gray-700;
+  }
+  body {
+    @apply bg-white dark:bg-gray-900 text-gray-900 dark:text-white;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+}
+
+/* Kuest Glassmorphism utilities with 3D effects */
+@layer utilities {
+  .glass {
+    @apply bg-white/10 backdrop-blur-md border border-white/20;
+  }
+  
+  .glass-dark {
+    @apply bg-gray-900/10 backdrop-blur-md border border-gray-700/20;
+  }
+  
+  .kuest-glass {
+    @apply bg-kuest-green/5 backdrop-blur-md border border-kuest-green/20;
+  }
+  
+  .kuest-glass-dark {
+    @apply bg-kuest-black/20 backdrop-blur-md border border-kuest-green/30;
+  }
+  
+  .gradient-bg {
+    background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 50%, #86efac 100%);
+  }
+  
+  .gradient-bg-dark {
+    background: linear-gradient(135deg, #000000 0%, #1a1a1a 50%, #22c55e 100%);
+  }
+  
+  .kuest-hero-bg {
+    background: linear-gradient(135deg, #22c55e 0%, #16a34a 25%, #000000 75%, #0a0a0a 100%);
+  }
+  
+  .kuest-gradient {
+    background: linear-gradient(135deg, #22c55e 0%, #16a34a 50%, #000000 100%);
+  }
+  
+  .kuest-gradient-reverse {
+    background: linear-gradient(135deg, #000000 0%, #16a34a 50%, #22c55e 100%);
+  }
+  
+  .kuest-text-gradient {
+    @apply bg-gradient-to-r from-kuest-green to-kuest-green-dark bg-clip-text text-transparent;
+  }
+  
+  .kuest-glow {
+    @apply shadow-lg shadow-kuest-green/25;
+  }
+  
+  .kuest-glow-hover {
+    @apply hover:shadow-xl hover:shadow-kuest-green/40 transition-all duration-300;
+  }
+  
+  /* 3D Effects */
+  .kuest-3d-card {
+    transform-style: preserve-3d;
+    perspective: 1000px;
+  }
+  
+  .kuest-3d-hover {
+    @apply transition-transform duration-300;
+  }
+  
+  .kuest-3d-hover:hover {
+    transform: translateZ(20px) rotateX(5deg) rotateY(5deg);
+  }
+  
+  .kuest-3d-float {
+    animation: kuest-3d-float 4s ease-in-out infinite;
+  }
+  
+  .kuest-3d-rotate {
+    animation: kuest-3d-rotate 8s ease-in-out infinite;
+  }
+  
+  .kuest-morph {
+    animation: kuest-morph 6s ease-in-out infinite;
+  }
+  
+  /* Apple-like animations */
+  .apple-scale {
+    animation: apple-scale 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+  
+  .apple-fade {
+    animation: apple-fade 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+  
+  .apple-slide {
+    animation: apple-slide 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+  
+  /* Legacy quest animations for compatibility */
+  .quest-animate-pulse {
+    animation: kuest-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+  
+  .quest-animate-bounce {
+    animation: kuest-bounce 1s infinite;
+  }
+  
+  .quest-animate-spin {
+    animation: kuest-spin 3s linear infinite;
+  }
+  
+  .quest-animate-float {
+    animation: kuest-float 6s ease-in-out infinite;
+  }
+  
+  .quest-animate-glow {
+    animation: kuest-glow 2s ease-in-out infinite alternate;
+  }
+}
