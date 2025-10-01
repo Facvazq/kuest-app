@@ -112,16 +112,23 @@ export default function HomePage() {
                 </div>
                 
                 <p className="text-lg text-white/80 mb-6 leading-relaxed">
-                  An interactive quiz and form builder with advanced features including auto-scoring, 
-                  multiple question types, beautiful themes, and real-time analytics. Built with Next.js, 
-                  TypeScript, and 3D animations.
+                  A powerful quiz and form creation platform that revolutionizes how educators, businesses, and content creators 
+                  build interactive assessments. Features intelligent auto-scoring, real-time analytics, beautiful themes, and 
+                  seamless user experience. Perfect for online learning, employee training, market research, and engaging content creation.
                 </p>
 
                 <div className="flex flex-wrap gap-3 mb-6">
-                  {['Next.js', 'TypeScript', 'Tailwind CSS', 'Framer Motion', 'Three.js', 'Auto-Scoring'].map((tech) => (
-                    <span key={tech} className="px-3 py-1 bg-white/10 text-white/90 rounded-lg text-sm">
-                      {tech}
-                    </span>
+                  {['Auto-Scoring', 'Real-time Analytics', 'Multiple Question Types', 'Beautiful Themes', '3D Animations', 'Responsive Design'].map((feature) => (
+                    <motion.span 
+                      key={feature}
+                      initial={{ opacity: 0, scale: 0.8 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ delay: 1.1 + Math.random() * 0.3 }}
+                      whileHover={{ scale: 1.05, y: -2 }}
+                      className="px-3 py-1 bg-white/10 text-white/90 rounded-lg text-sm kuest-glow-hover transition-all duration-300"
+                    >
+                      {feature}
+                    </motion.span>
                   ))}
                 </div>
 
@@ -158,31 +165,39 @@ export default function HomePage() {
                       <Sparkles className="w-5 h-5 text-kuest-green-light" />
                       <span className="text-white font-medium">Key Features</span>
                     </div>
-                    <ul className="space-y-2 text-white/80">
-                      <li className="flex items-center space-x-2">
-                        <div className="w-2 h-2 bg-kuest-green rounded-full"></div>
-                        <span>Interactive Quiz Builder</span>
-                      </li>
-                      <li className="flex items-center space-x-2">
-                        <div className="w-2 h-2 bg-kuest-green rounded-full"></div>
-                        <span>Auto-Scoring System</span>
-                      </li>
-                      <li className="flex items-center space-x-2">
-                        <div className="w-2 h-2 bg-kuest-green rounded-full"></div>
-                        <span>Multiple Question Types</span>
-                      </li>
-                      <li className="flex items-center space-x-2">
-                        <div className="w-2 h-2 bg-kuest-green rounded-full"></div>
-                        <span>Beautiful Themes</span>
-                      </li>
-                      <li className="flex items-center space-x-2">
-                        <div className="w-2 h-2 bg-kuest-green rounded-full"></div>
-                        <span>Real-time Analytics</span>
-                      </li>
-                      <li className="flex items-center space-x-2">
-                        <div className="w-2 h-2 bg-kuest-green rounded-full"></div>
-                        <span>3D Animations</span>
-                      </li>
+                    <ul className="space-y-3 text-white/80">
+                      {[
+                        { icon: "🎯", text: "Interactive Quiz Builder" },
+                        { icon: "⚡", text: "Intelligent Auto-Scoring" },
+                        { icon: "📊", text: "Real-time Analytics" },
+                        { icon: "🎨", text: "Beautiful Themes" },
+                        { icon: "📱", text: "Mobile Responsive" },
+                        { icon: "🔒", text: "Secure & Private" }
+                      ].map((item, index) => (
+                        <motion.li 
+                          key={index}
+                          initial={{ opacity: 0, x: -20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: 1.4 + index * 0.1 }}
+                          className="flex items-center space-x-3"
+                        >
+                          <motion.span 
+                            className="text-lg"
+                            animate={{ 
+                              rotate: [0, 10, -10, 0],
+                              scale: [1, 1.1, 1]
+                            }}
+                            transition={{ 
+                              duration: 2,
+                              repeat: Infinity,
+                              delay: index * 0.2
+                            }}
+                          >
+                            {item.icon}
+                          </motion.span>
+                          <span>{item.text}</span>
+                        </motion.li>
+                      ))}
                     </ul>
                   </div>
                 </motion.div>
@@ -198,14 +213,36 @@ export default function HomePage() {
             className="kuest-glass rounded-3xl p-8 text-center"
           >
             <div className="max-w-2xl mx-auto">
-              <h3 className="text-2xl font-bold text-white mb-4">More Projects Coming Soon</h3>
+              <motion.h3 
+                className="text-2xl font-bold text-white mb-4"
+                animate={{ 
+                  textShadow: [
+                    "0 0 0px rgba(34, 197, 94, 0)",
+                    "0 0 20px rgba(34, 197, 94, 0.5)",
+                    "0 0 0px rgba(34, 197, 94, 0)"
+                  ]
+                }}
+                transition={{ 
+                  duration: 3,
+                  repeat: Infinity,
+                  ease: "easeInOut"
+                }}
+              >
+                More Projects Coming Soon
+              </motion.h3>
               <p className="text-white/70 mb-6">
                 I&apos;m constantly working on new projects and tools. Stay tuned for more innovative solutions!
               </p>
               <div className="flex justify-center">
                 <motion.div
-                  animate={{ rotate: 360 }}
-                  transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+                  animate={{ 
+                    rotate: 360,
+                    scale: [1, 1.2, 1]
+                  }}
+                  transition={{ 
+                    rotate: { duration: 2, repeat: Infinity, ease: "linear" },
+                    scale: { duration: 1.5, repeat: Infinity, ease: "easeInOut" }
+                  }}
                   className="w-8 h-8 border-2 border-kuest-green border-t-transparent rounded-full"
                 ></motion.div>
               </div>
@@ -222,32 +259,49 @@ export default function HomePage() {
         className="relative z-10 container mx-auto px-6 py-12 text-center"
       >
         <div className="kuest-glass rounded-2xl p-8 max-w-2xl mx-auto">
-          <h4 className="text-xl font-bold text-white mb-4">Fac Systems</h4>
+          <motion.h4 
+            className="text-xl font-bold text-white mb-4"
+            animate={{ 
+              scale: [1, 1.05, 1],
+              textShadow: [
+                "0 0 0px rgba(34, 197, 94, 0)",
+                "0 0 15px rgba(34, 197, 94, 0.3)",
+                "0 0 0px rgba(34, 197, 94, 0)"
+              ]
+            }}
+            transition={{ 
+              duration: 4,
+              repeat: Infinity,
+              ease: "easeInOut"
+            }}
+          >
+            Fac Systems
+          </motion.h4>
           <p className="text-white/70 mb-6">
             Building the future of web applications with innovative technology and creative solutions.
           </p>
           <div className="flex justify-center space-x-6">
-            <motion.a
-              href="#"
-              whileHover={{ scale: 1.1, y: -2 }}
-              className="text-white/70 hover:text-white transition-colors"
-            >
-              GitHub
-            </motion.a>
-            <motion.a
-              href="#"
-              whileHover={{ scale: 1.1, y: -2 }}
-              className="text-white/70 hover:text-white transition-colors"
-            >
-              LinkedIn
-            </motion.a>
-            <motion.a
-              href="#"
-              whileHover={{ scale: 1.1, y: -2 }}
-              className="text-white/70 hover:text-white transition-colors"
-            >
-              Contact
-            </motion.a>
+            {[
+              { name: "GitHub", href: "#" },
+              { name: "LinkedIn", href: "#" },
+              { name: "Contact", href: "#" }
+            ].map((link, index) => (
+              <motion.a
+                key={link.name}
+                href={link.href}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 1.8 + index * 0.1 }}
+                whileHover={{ 
+                  scale: 1.1, 
+                  y: -2,
+                  textShadow: "0 0 10px rgba(34, 197, 94, 0.5)"
+                }}
+                className="text-white/70 hover:text-white transition-colors"
+              >
+                {link.name}
+              </motion.a>
+            ))}
           </div>
         </div>
       </motion.footer>
