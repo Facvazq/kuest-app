@@ -143,13 +143,6 @@ export default function HomePage() {
                       <ExternalLink className="w-4 h-4" />
                     </motion.button>
                   </Link>
-                  <motion.button
-                    whileHover={{ scale: 1.05, y: -2 }}
-                    whileTap={{ scale: 0.95 }}
-                    className="bg-white/10 backdrop-blur-md text-white px-6 py-3 rounded-lg font-semibold border border-white/20 hover:bg-white/20 transition-all duration-300"
-                  >
-                    View Source
-                  </motion.button>
                 </div>
               </div>
 
