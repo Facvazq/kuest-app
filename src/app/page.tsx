@@ -1,15 +1,84 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
-import { ArrowRight, Code, Zap, Sparkles, ExternalLink } from 'lucide-react';
+import { ArrowRight, Code, Zap, Sparkles, ExternalLink, X } from 'lucide-react';
 import FloatingShapes3D from '@/components/FloatingShapes3D';
 
 export default function HomePage() {
+  const [showContactPopup, setShowContactPopup] = useState(false);
+
   return (
     <div className="min-h-screen kuest-hero-bg relative overflow-hidden">
       {/* 3D Background Elements */}
       <FloatingShapes3D />
+      
+      {/* Contact Popup */}
+      <AnimatePresence>
+        {showContactPopup && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+            onClick={() => setShowContactPopup(false)}
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.8, y: 20 }}
+              className="kuest-glass rounded-2xl p-8 max-w-md w-full relative"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button
+                onClick={() => setShowContactPopup(false)}
+                className="absolute top-4 right-4 text-white/70 hover:text-white transition-colors"
+              >
+                <X className="w-6 h-6" />
+              </button>
+              
+              <div className="text-center">
+                <div className="w-16 h-16 bg-gradient-to-r from-kuest-green to-kuest-green-dark rounded-full flex items-center justify-center mx-auto mb-6">
+                  <Code className="w-8 h-8 text-white" />
+                </div>
+                
+                <h3 className="text-2xl font-bold text-white mb-4">Get in Touch</h3>
+                <p className="text-white/70 mb-6">
+                  Ready to collaborate or have a project in mind?
+                </p>
+                
+                <div className="kuest-glass rounded-xl p-4 mb-6">
+                  <p className="text-white/80 text-sm mb-2">Email me at:</p>
+                  <motion.p 
+                    className="text-kuest-green-light font-semibold text-lg"
+                    whileHover={{ scale: 1.05 }}
+                    onClick={() => {
+                      navigator.clipboard.writeText('home@facsystems.dev');
+                      alert('Email copied to clipboard!');
+                    }}
+                    style={{ cursor: 'pointer' }}
+                  >
+                    home@facsystems.dev
+                  </motion.p>
+                </div>
+                
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => {
+                    navigator.clipboard.writeText('home@facsystems.dev');
+                    alert('Email copied to clipboard!');
+                  }}
+                  className="kuest-gradient text-white px-6 py-3 rounded-lg font-semibold kuest-glow-hover transition-all duration-300"
+                >
+                  Copy Email
+                </motion.button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
       
       {/* Navigation */}
       <nav className="relative z-10 flex justify-between items-center p-6">
@@ -273,28 +342,21 @@ export default function HomePage() {
           <p className="text-white/70 mb-6">
             Building the future of web applications with innovative technology and creative solutions.
           </p>
-          <div className="flex justify-center space-x-6">
-            {[
-              { name: "GitHub", href: "#" },
-              { name: "LinkedIn", href: "#" },
-              { name: "Contact", href: "#" }
-            ].map((link, index) => (
-              <motion.a
-                key={link.name}
-                href={link.href}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 1.8 + index * 0.1 }}
-                whileHover={{ 
-                  scale: 1.1, 
-                  y: -2,
-                  textShadow: "0 0 10px rgba(34, 197, 94, 0.5)"
-                }}
-                className="text-white/70 hover:text-white transition-colors"
-              >
-                {link.name}
-              </motion.a>
-            ))}
+          <div className="flex justify-center">
+            <motion.button
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 1.8 }}
+              whileHover={{ 
+                scale: 1.1, 
+                y: -2,
+                textShadow: "0 0 10px rgba(34, 197, 94, 0.5)"
+              }}
+              onClick={() => setShowContactPopup(true)}
+              className="text-white/70 hover:text-white transition-colors text-lg font-medium"
+            >
+              Contact
+            </motion.button>
           </div>
         </div>
       </motion.footer>
