@@ -10,7 +10,6 @@ import { storage } from '@/lib/storage';
 import QuestionRenderer from '@/components/QuestionRenderer';
 import EmojiPicker from '@/components/EmojiPicker';
 import ColorPicker from '@/components/ColorPicker';
-import ThemeToggle from '@/components/ThemeToggle';
 
 export default function FormBuilderPage() {
   const router = useRouter();
@@ -430,7 +429,6 @@ export default function FormBuilderPage() {
             <ArrowLeft className="w-5 h-5" />
             <span>Back to Dashboard</span>
           </Link>
-          <ThemeToggle />
         </nav>
 
         {/* Header */}
