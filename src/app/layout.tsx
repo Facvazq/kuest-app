@@ -7,7 +7,8 @@ const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
   title: 'Fac Systems - Development Portfolio',
-  description: 'Innovative web applications and tools designed to solve real-world problems. Explore Quest and other cutting-edge projects.',
+  description: 'Innovative web applications and tools designed to solve real-world problems. Explore Kuest and other cutting-edge projects.',
+  metadataBase: new URL('https://facsystems.dev'),
   icons: {
     icon: [
       { url: '/favicon.ico', sizes: 'any' },

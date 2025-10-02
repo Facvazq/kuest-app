@@ -112,7 +112,9 @@ export default function FormBuilderPage() {
 
     // Use Supabase URL if available, otherwise fall back to encoded URL
     if (hybridStorage.isSupabaseAvailable()) {
-      const shareUrl = `${window.location.origin}/form/${form.id}`;
+      // Use production domain if available, otherwise current origin
+      const baseUrl = process.env.NODE_ENV === 'production' ? 'https://facsystems.dev' : window.location.origin;
+      const shareUrl = `${baseUrl}/form/${form.id}`;
       navigator.clipboard.writeText(shareUrl).then(() => {
         alert('Share link copied to clipboard!');
       }).catch(() => {
@@ -121,7 +123,8 @@ export default function FormBuilderPage() {
     } else {
       const encodedData = hybridStorage.encodeFormToUrl(form);
       if (encodedData) {
-        const shareUrl = `${window.location.origin}/shared/${encodedData}`;
+        const baseUrl = process.env.NODE_ENV === 'production' ? 'https://facsystems.dev' : window.location.origin;
+        const shareUrl = `${baseUrl}/shared/${encodedData}`;
         navigator.clipboard.writeText(shareUrl).then(() => {
           alert('Share link copied to clipboard!');
         }).catch(() => {
