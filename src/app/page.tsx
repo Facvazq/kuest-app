@@ -36,6 +36,53 @@ export default function HomePage() {
       {/* 3D Background Elements */}
       <FloatingShapes3D />
       
+      {/* Auto DMV Banner */}
+      <motion.div
+        initial={{ opacity: 0, y: -50 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, delay: 0.1 }}
+        className="relative z-20 bg-gradient-to-r from-red-500/20 to-orange-500/20 backdrop-blur-md border-b border-red-500/30"
+      >
+        <div className="container mx-auto px-6 py-3">
+          <div className="flex items-center justify-center space-x-3">
+            <motion.div
+              animate={{ 
+                scale: [1, 1.1, 1],
+                rotate: [0, 5, -5, 0]
+              }}
+              transition={{ 
+                duration: 2,
+                repeat: Infinity,
+                ease: "easeInOut"
+              }}
+              className="w-6 h-6 bg-gradient-to-r from-red-500 to-orange-500 rounded-full flex items-center justify-center"
+            >
+              <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+            </motion.div>
+            <span className="text-white font-semibold text-sm md:text-base">
+              🚨 <span className="text-red-300">Auto DMV</span> is coming this month! 
+              <span className="text-white/80 ml-2">Free CAD/MDT system for role-play servers</span>
+            </span>
+            <motion.div
+              animate={{ 
+                x: [0, 5, 0],
+                opacity: [0.7, 1, 0.7]
+              }}
+              transition={{ 
+                duration: 1.5,
+                repeat: Infinity,
+                ease: "easeInOut"
+              }}
+              className="text-red-300"
+            >
+              →
+            </motion.div>
+          </div>
+        </div>
+      </motion.div>
+      
       {/* Contact Popup */}
       <AnimatePresence>
         {showContactPopup && (
