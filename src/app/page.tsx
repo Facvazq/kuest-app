@@ -285,7 +285,14 @@ export default function HomePage() {
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ delay: 1.1 + Math.random() * 0.3 }}
                         whileHover={{ scale: 1.05, y: -2 }}
-                        className="px-3 py-1 bg-white/10 text-white/90 rounded-lg text-sm kuest-glow-hover transition-all duration-300"
+                        className={`px-3 py-1 rounded-lg text-sm kuest-glow-hover transition-all duration-300 ${
+                          feature === 'Auto-Scoring' ? 'bg-green-500/20 text-green-300' :
+                          feature === 'Real-time Analytics' ? 'bg-blue-500/20 text-blue-300' :
+                          feature === 'Multiple Question Types' ? 'bg-purple-500/20 text-purple-300' :
+                          feature === 'Beautiful Themes' ? 'bg-pink-500/20 text-pink-300' :
+                          feature === '3D Animations' ? 'bg-orange-500/20 text-orange-300' :
+                          'bg-cyan-500/20 text-cyan-300'
+                        }`}
                       >
                         {feature}
                       </motion.span>
