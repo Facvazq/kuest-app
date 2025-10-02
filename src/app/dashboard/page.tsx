@@ -5,15 +5,15 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { Edit, BarChart3, Share2, Trash2, Plus, Home, FileText } from 'lucide-react';
 import { Form } from '@/types';
-import { storage } from '@/lib/storage';
+import { hybridStorage } from '@/lib/hybrid-storage';
 
 export default function DashboardPage() {
   const [forms, setForms] = useState<Form[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const loadForms = () => {
-      const savedForms = storage.getForms();
+    const loadForms = async () => {
+      const savedForms = await hybridStorage.getForms();
       setForms(savedForms);
       setLoading(false);
     };
@@ -21,10 +21,14 @@ export default function DashboardPage() {
     loadForms();
   }, []);
 
-  const handleDeleteForm = (formId: string) => {
+  const handleDeleteForm = async (formId: string) => {
     if (confirm('Are you sure you want to delete this form? This action cannot be undone.')) {
-      storage.deleteForm(formId);
-      setForms(forms.filter(f => f.id !== formId));
+      const success = await hybridStorage.deleteForm(formId);
+      if (success) {
+        setForms(forms.filter(f => f.id !== formId));
+      } else {
+        alert('Failed to delete form. Please try again.');
+      }
     }
   };
 

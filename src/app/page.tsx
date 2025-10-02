@@ -252,7 +252,7 @@ export default function HomePage() {
           </div>
 
           <div className="space-y-8">
-            {/* Quest Project Card */}
+            {/* Kuest Project Card */}
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
@@ -265,7 +265,7 @@ export default function HomePage() {
                     <div className="w-12 h-12 bg-gradient-to-r from-kuest-green to-kuest-green-dark rounded-xl flex items-center justify-center">
                       <Zap className="w-6 h-6 text-white" />
                     </div>
-                    <h3 className="text-3xl font-bold text-white">Quest</h3>
+                    <h3 className="text-3xl font-bold text-white">Kuest</h3>
                     <span className="px-3 py-1 bg-kuest-green/20 text-kuest-green-light rounded-full text-sm font-medium">
                       Latest
                     </span>
@@ -306,7 +306,7 @@ export default function HomePage() {
                         whileTap={{ scale: 0.95 }}
                         className="kuest-gradient text-white px-6 py-3 rounded-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 flex items-center space-x-2 kuest-glow-hover"
                       >
-                        <span>Launch Quest</span>
+                        <span>Launch Kuest</span>
                         <ExternalLink className="w-4 h-4" />
                       </motion.button>
                     </Link>

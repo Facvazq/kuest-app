@@ -164,5 +164,84 @@ export const storage = {
     });
 
     return { score, maxScore };
+  },
+
+  // URL-based sharing functions
+  encodeFormToUrl: (form: Form): string => {
+    try {
+      const formData = JSON.stringify(form);
+      const encoded = btoa(encodeURIComponent(formData));
+      return encoded;
+    } catch (error) {
+      console.error('Error encoding form:', error);
+      return '';
+    }
+  },
+
+  decodeFormFromUrl: (encodedData: string): Form | null => {
+    try {
+      const decoded = decodeURIComponent(atob(encodedData));
+      const form = JSON.parse(decoded);
+      
+      // Ensure all required properties exist with defaults
+      return {
+        ...form,
+        theme: form.theme || 'default',
+        accentColor: form.accentColor || '#22c55e',
+        backgroundStyle: form.backgroundStyle || 'gradient',
+        backgroundColor: form.backgroundColor || '#000000',
+        mode: form.mode || 'standard',
+        passingMark: form.passingMark || 70
+      };
+    } catch (error) {
+      console.error('Error decoding form:', error);
+      return null;
+    }
+  },
+
+  // File-based sharing functions
+  exportFormToFile: (form: Form): void => {
+    try {
+      const formData = JSON.stringify(form, null, 2);
+      const blob = new Blob([formData], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${form.title.replace(/[^a-z0-9]/gi, '_').toLowerCase()}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error('Error exporting form:', error);
+    }
+  },
+
+  importFormFromFile: (file: File): Promise<Form | null> => {
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        try {
+          const form = JSON.parse(e.target?.result as string);
+          // Ensure all required properties exist with defaults
+          const processedForm = {
+            ...form,
+            id: storage.generateId(), // Generate new ID to avoid conflicts
+            theme: form.theme || 'default',
+            accentColor: form.accentColor || '#22c55e',
+            backgroundStyle: form.backgroundStyle || 'gradient',
+            backgroundColor: form.backgroundColor || '#000000',
+            mode: form.mode || 'standard',
+            passingMark: form.passingMark || 70
+          };
+          resolve(processedForm);
+        } catch (error) {
+          console.error('Error importing form:', error);
+          resolve(null);
+        }
+      };
+      reader.readAsText(file);
+    });
   }
 };

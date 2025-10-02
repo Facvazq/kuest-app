@@ -4,9 +4,9 @@ import { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Save, Settings, Eye, Palette, Home } from 'lucide-react';
+import { ArrowLeft, Save, Settings, Eye, Palette, Home, Share2, Download, Upload } from 'lucide-react';
 import { Form, Question } from '@/types';
-import { storage } from '@/lib/storage';
+import { hybridStorage } from '@/lib/hybrid-storage';
 import QuestionRenderer from '@/components/QuestionRenderer';
 import EmojiPicker from '@/components/EmojiPicker';
 import ColorPicker from '@/components/ColorPicker';
@@ -35,47 +35,56 @@ export default function FormBuilderPage() {
   const [editingQuestion, setEditingQuestion] = useState<Question | null>(null);
   const [showQuestionForm, setShowQuestionForm] = useState(false);
   const [showFormSettings, setShowFormSettings] = useState(false);
+  const [showShareOptions, setShowShareOptions] = useState(false);
 
   useEffect(() => {
-    if (formId) {
-      const existingForm = storage.getForm(formId);
-      if (existingForm) {
-        setForm(existingForm);
-        setIsEditing(true);
+    const loadForm = async () => {
+      if (formId) {
+        const existingForm = await hybridStorage.getForm(formId);
+        if (existingForm) {
+          setForm(existingForm);
+          setIsEditing(true);
+        }
+      } else {
+        // New form
+        const newForm = {
+          id: hybridStorage.generateId(),
+          title: '',
+          description: '',
+          questions: [],
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+          theme: 'default' as 'light' | 'dark' | 'default' | 'electric' | 'warm' | 'royal',
+          accentColor: '#22c55e',
+          backgroundStyle: 'gradient' as 'solid' | 'gradient' | 'pattern',
+          backgroundColor: '#000000',
+          mode: 'standard' as 'standard' | 'questionnaire',
+          passingMark: 70,
+        };
+        setForm(newForm);
+        // Save the form immediately so it can be accessed by themes page
+        await hybridStorage.saveForm(newForm);
       }
-    } else {
-      // New form
-      const newForm = {
-        id: storage.generateId(),
-        title: '',
-        description: '',
-        questions: [],
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-        theme: 'default' as 'light' | 'dark' | 'default' | 'electric' | 'warm' | 'royal',
-        accentColor: '#22c55e',
-        backgroundStyle: 'gradient' as 'solid' | 'gradient' | 'pattern',
-        backgroundColor: '#000000',
-        mode: 'standard' as 'standard' | 'questionnaire',
-        passingMark: 70,
-      };
-      setForm(newForm);
-      // Save the form immediately so it can be accessed by themes page
-      storage.saveForm(newForm);
-    }
+    };
+    
+    loadForm();
   }, [formId]);
 
   // Reload form when component mounts (e.g., returning from themes page)
   useEffect(() => {
-    if (formId) {
-      const existingForm = storage.getForm(formId);
-      if (existingForm) {
-        setForm(existingForm);
+    const reloadForm = async () => {
+      if (formId) {
+        const existingForm = await hybridStorage.getForm(formId);
+        if (existingForm) {
+          setForm(existingForm);
+        }
       }
-    }
+    };
+    
+    reloadForm();
   }, [formId]);
 
-  const handleSaveForm = () => {
+  const handleSaveForm = async () => {
     if (!form.title.trim()) {
       alert('Please enter a form title');
       return;
@@ -86,9 +95,65 @@ export default function FormBuilderPage() {
       updatedAt: new Date().toISOString(),
     };
 
-    storage.saveForm(updatedForm);
-    alert('Form saved successfully!');
-    router.push('/dashboard');
+    const savedForm = await hybridStorage.saveForm(updatedForm);
+    if (savedForm) {
+      alert('Form saved successfully!');
+      router.push('/dashboard');
+    } else {
+      alert('Failed to save form. Please try again.');
+    }
+  };
+
+  const handleShareForm = () => {
+    if (!form.title.trim()) {
+      alert('Please save the form first before sharing');
+      return;
+    }
+
+    // Use Supabase URL if available, otherwise fall back to encoded URL
+    if (hybridStorage.isSupabaseAvailable()) {
+      const shareUrl = `${window.location.origin}/form/${form.id}`;
+      navigator.clipboard.writeText(shareUrl).then(() => {
+        alert('Share link copied to clipboard!');
+      }).catch(() => {
+        alert('Failed to copy link. Please copy manually: ' + shareUrl);
+      });
+    } else {
+      const encodedData = hybridStorage.encodeFormToUrl(form);
+      if (encodedData) {
+        const shareUrl = `${window.location.origin}/shared/${encodedData}`;
+        navigator.clipboard.writeText(shareUrl).then(() => {
+          alert('Share link copied to clipboard!');
+        }).catch(() => {
+          alert('Failed to copy link. Please copy manually: ' + shareUrl);
+        });
+      } else {
+        alert('Failed to generate share link');
+      }
+    }
+  };
+
+  const handleDownloadForm = () => {
+    if (!form.title.trim()) {
+      alert('Please save the form first before downloading');
+      return;
+    }
+    hybridStorage.exportFormToFile(form);
+  };
+
+  const handleImportForm = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      hybridStorage.importFormFromFile(file).then((importedForm) => {
+        if (importedForm) {
+          setForm(importedForm);
+          setIsEditing(false);
+          alert('Form imported successfully!');
+        } else {
+          alert('Failed to import form. Please check the file format.');
+        }
+      });
+    }
   };
 
   const handleAddQuestion = (type: Question['type']) => {
@@ -464,6 +529,15 @@ export default function FormBuilderPage() {
               <Save className="w-4 h-4 mr-2" />
               Save Kuest
             </motion.button>
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => setShowShareOptions(!showShareOptions)}
+              className="kuest-gradient text-white px-6 py-2 rounded-xl font-semibold kuest-glow kuest-glow-hover kuest-3d-hover transition-all duration-300 flex items-center"
+            >
+              <Share2 className="w-4 h-4 mr-2" />
+              Share
+            </motion.button>
           </div>
         </motion.div>
 
@@ -713,6 +787,67 @@ export default function FormBuilderPage() {
       </div>
 
       {showQuestionForm && <QuestionForm />}
+
+      {/* Share Options Modal */}
+      {showShareOptions && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="bg-white dark:bg-gray-800 rounded-2xl p-6 max-w-md w-full"
+          >
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-xl font-semibold text-gray-900 dark:text-white">Share Form</h3>
+              <button
+                onClick={() => setShowShareOptions(false)}
+                className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className="space-y-4">
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={handleShareForm}
+                className="w-full bg-blue-500 hover:bg-blue-600 text-white px-4 py-3 rounded-lg font-medium transition-colors flex items-center justify-center"
+              >
+                <Share2 className="w-4 h-4 mr-2" />
+                Copy Share Link
+              </motion.button>
+
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={handleDownloadForm}
+                className="w-full bg-green-500 hover:bg-green-600 text-white px-4 py-3 rounded-lg font-medium transition-colors flex items-center justify-center"
+              >
+                <Download className="w-4 h-4 mr-2" />
+                Download Form File
+              </motion.button>
+
+              <div className="border-t border-gray-200 dark:border-gray-700 pt-4">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Import Form File
+                </label>
+                <input
+                  type="file"
+                  accept=".json"
+                  onChange={handleImportForm}
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                />
+              </div>
+            </div>
+
+            <div className="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+              <p className="text-sm text-blue-800 dark:text-blue-200">
+                <strong>Share Link:</strong> Creates a URL that anyone can use to access your form from any device.
+              </p>
+            </div>
+          </motion.div>
+        </div>
+      )}
     </div>
   );
 }

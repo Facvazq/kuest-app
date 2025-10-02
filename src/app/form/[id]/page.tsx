@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { Home, CheckCircle, AlertCircle } from 'lucide-react';
 import { Form, FormResponse } from '@/types';
-import { storage } from '@/lib/storage';
+import { hybridStorage } from '@/lib/hybrid-storage';
 import QuestionRenderer from '@/components/QuestionRenderer';
 
 export default function FormViewPage() {
@@ -91,8 +91,8 @@ export default function FormViewPage() {
   };
 
   useEffect(() => {
-    const loadForm = () => {
-      const foundForm = storage.getForm(formId);
+    const loadForm = async () => {
+      const foundForm = await hybridStorage.getForm(formId);
       if (foundForm) {
         setForm(foundForm);
         // Initialize responses object
@@ -121,7 +121,7 @@ export default function FormViewPage() {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!form) return;
@@ -151,7 +151,7 @@ export default function FormViewPage() {
     let calculatedScore = 0;
     let calculatedMaxScore = 0;
     if (form.mode === 'questionnaire') {
-      const scoreResult = storage.calculateScore(responses, form);
+      const scoreResult = hybridStorage.calculateScore(responses, form);
       calculatedScore = scoreResult.score;
       calculatedMaxScore = scoreResult.maxScore;
       setPreliminaryScore({ score: calculatedScore, maxScore: calculatedMaxScore });
@@ -159,7 +159,7 @@ export default function FormViewPage() {
 
     // Save response
     const newResponse: FormResponse = {
-      id: storage.generateId(),
+      id: hybridStorage.generateId(),
       formId: form.id,
       responses,
       submittedAt: new Date().toISOString(),
@@ -168,7 +168,7 @@ export default function FormViewPage() {
       maxScore: form.mode === 'questionnaire' ? calculatedMaxScore : undefined,
     };
 
-    storage.saveResponse(newResponse);
+    await hybridStorage.saveResponse(newResponse);
     setSubmitted(true);
   };
 
@@ -281,15 +281,27 @@ export default function FormViewPage() {
                 Your response has been submitted successfully.
               </p>
             )}
-            <Link href="/">
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className={`${styles.button} text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300`}
-              >
-                Go Home
-              </motion.button>
-            </Link>
+            <div className="flex gap-4 justify-center">
+              <Link href="/">
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className={`${styles.button} text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300`}
+                >
+                  <Home className="w-4 h-4 mr-2 inline" />
+                  Go Home
+                </motion.button>
+              </Link>
+              <Link href="/">
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className={`${styles.button} text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300`}
+                >
+                  Visit Fac Systems
+                </motion.button>
+              </Link>
+            </div>
           </div>
         </motion.div>
       </div>
