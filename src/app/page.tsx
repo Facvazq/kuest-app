@@ -9,6 +9,7 @@ import { LineByLineTypewriter } from '@/components/TypewriterText';
 
 export default function HomePage() {
   const [showContactPopup, setShowContactPopup] = useState(false);
+  const [showMaintenanceModal, setShowMaintenanceModal] = useState(false);
   const [showScrollArrow, setShowScrollArrow] = useState(true);
   const projectsRef = useRef<HTMLDivElement>(null);
 
@@ -30,6 +31,16 @@ export default function HomePage() {
 
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Check for maintenance redirect
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.has('maintenance')) {
+      setShowMaintenanceModal(true);
+      // Clean up URL
+      window.history.replaceState({}, document.title, '/');
+    }
   }, []);
 
   return (
@@ -79,6 +90,53 @@ export default function HomePage() {
               className="text-red-300"
             >
               →
+            </motion.div>
+          </div>
+        </div>
+      </motion.div>
+      
+      {/* MAINTENANCE MODE BANNER */}
+      <motion.div
+        initial={{ opacity: 0, y: -50 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, delay: 0.15 }}
+        className="relative z-20 bg-gradient-to-r from-yellow-500/30 to-amber-500/30 backdrop-blur-md border-b-2 border-yellow-500/50"
+      >
+        <div className="container mx-auto px-6 py-4">
+          <div className="flex items-center justify-center space-x-3">
+            <motion.div
+              animate={{ 
+                scale: [1, 1.2, 1],
+                rotate: [0, 180, 360]
+              }}
+              transition={{ 
+                duration: 3,
+                repeat: Infinity,
+                ease: "easeInOut"
+              }}
+              className="w-8 h-8 bg-gradient-to-r from-yellow-400 to-amber-500 rounded-full flex items-center justify-center"
+            >
+              <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+              </svg>
+            </motion.div>
+            <span className="text-white font-bold text-sm md:text-lg">
+              ⚠️ <span className="text-yellow-300">Quest Temporarily Unavailable</span> 
+              <span className="text-white/90 ml-2">Maintenance mode active - Full access coming soon!</span>
+            </span>
+            <motion.div
+              animate={{ 
+                x: [0, 8, 0],
+                scale: [1, 1.1, 1]
+              }}
+              transition={{ 
+                duration: 2,
+                repeat: Infinity,
+                ease: "easeInOut"
+              }}
+              className="text-yellow-400 text-xl"
+            >
+              🚧
             </motion.div>
           </div>
         </div>
@@ -144,6 +202,85 @@ export default function HomePage() {
                 >
                   Copy Email
                 </motion.button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+      
+      {/* Maintenance Modal */}
+      <AnimatePresence>
+        {showMaintenanceModal && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+            onClick={() => setShowMaintenanceModal(false)}
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.8, y: 20 }}
+              className="bg-gradient-to-br from-yellow-500/20 to-amber-500/20 backdrop-blur-md rounded-2xl p-8 max-w-md w-full relative border border-yellow-500/30"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button
+                onClick={() => setShowMaintenanceModal(false)}
+                className="absolute top-4 right-4 text-white/70 hover:text-white transition-colors"
+              >
+                <X className="w-6 h-6" />
+              </button>
+              
+              <div className="text-center">
+                <motion.div
+                  animate={{ 
+                    rotate: [0, 360],
+                    scale: [1, 1.1, 1]
+                  }}
+                  transition={{ 
+                    rotate: { duration: 4, repeat: Infinity, ease: "linear" },
+                    scale: { duration: 2, repeat: Infinity, ease: "easeInOut" }
+                  }}
+                  className="w-20 h-20 bg-gradient-to-r from-yellow-400 to-amber-500 rounded-full flex items-center justify-center mx-auto mb-6"
+                >
+                  <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+                  </svg>
+                </motion.div>
+                
+                <h3 className="text-2xl font-bold text-white mb-4">Quest Temporarily Unavailable</h3>
+                <p className="text-white/80 mb-6 text-lg">
+                  Quest is currently undergoing maintenance to improve performance and add new features.
+                </p>
+                
+                <div className="bg-yellow-500/10 backdrop-blur-sm rounded-xl p-4 mb-6 border border-yellow-500/20">
+                  <p className="text-yellow-300 font-semibold">🚧 Under Maintenance</p>
+                  <p className="text-white/70 text-sm mt-2">
+                    We&apos;re working hard to bring you an even better experience. 
+                    Expected availability: <strong>Soon</strong>
+                  </p>
+                </div>
+                
+                <div className="flex flex-col gap-3">
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={() => setShowMaintenanceModal(false)}
+                    className="bg-white/10 backdrop-blur-md text-white px-6 py-3 rounded-lg font-semibold border border-white/20 hover:bg-white/20 transition-all duration-300"
+                  >
+                    Close
+                  </motion.button>
+                  
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={() => setShowContactPopup(true)}
+                    className="text-yellow-300 hover:text-yellow-200 transition-colors text-sm font-medium"
+                  >
+                    Contact Support
+                  </motion.button>
+                </div>
               </div>
             </motion.div>
           </motion.div>
@@ -311,16 +448,17 @@ export default function HomePage() {
                   </div>
 
                   <div className="flex flex-col sm:flex-row gap-4">
-                    <Link href="/dashboard">
-                      <motion.button
-                        whileHover={{ scale: 1.05, y: -2 }}
-                        whileTap={{ scale: 0.95 }}
-                        className="kuest-gradient text-white px-6 py-3 rounded-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 flex items-center space-x-2 kuest-glow-hover"
-                      >
-                        <span>Launch Kuest</span>
-                        <ExternalLink className="w-4 h-4" />
-                      </motion.button>
-                    </Link>
+                    <motion.button
+                      whileHover={{ scale: 1.05, y: -2 }}
+                      whileTap={{ scale: 0.95 }}
+                      onClick={() => setShowMaintenanceModal(true)}
+                      className="bg-gradient-to-r from-yellow-500/30 to-amber-500/30 backdrop-blur-md text-white px-6 py-3 rounded-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 flex items-center space-x-2 border border-yellow-500/30 hover:bg-gradient-to-r hover:from-yellow-500/40 hover:to-amber-500/40"
+                    >
+                      <span>🚧 Quest Temporarily Unavailable</span>
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+                      </svg>
+                    </motion.button>
                   </div>
                 </div>
 
