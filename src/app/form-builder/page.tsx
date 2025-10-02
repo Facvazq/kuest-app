@@ -23,11 +23,12 @@ export default function FormBuilderPage() {
     questions: [],
     createdAt: '',
     updatedAt: '',
-    theme: 'light',
-    accentColor: '#3b82f6',
-    backgroundStyle: 'solid',
-    backgroundColor: '#ffffff',
+    theme: 'default',
+    accentColor: '#22c55e',
+    backgroundStyle: 'gradient',
+    backgroundColor: '#000000',
     mode: 'standard',
+    passingMark: 70,
   });
 
   const [isEditing, setIsEditing] = useState(false);

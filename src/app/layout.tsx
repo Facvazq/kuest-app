@@ -16,9 +16,6 @@ export const metadata: Metadata = {
     apple: [
       { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' }
     ]
-  },
-  other: {
-    'google-adsense-account': 'ca-pub-3536688103376580'
   }
 }
 
@@ -30,14 +27,15 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+        <meta name="google-adsense-account" content="ca-pub-3536688103376580" />
+      </head>
+      <body className={inter.className}>
         <Script
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3536688103376580"
           crossOrigin="anonymous"
-          strategy="afterInteractive"
+          strategy="lazyOnload"
         />
-      </head>
-      <body className={inter.className}>
         {children}
       </body>
     </html>
