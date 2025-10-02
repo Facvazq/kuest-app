@@ -1,176 +1,97 @@
 import { Form, FormResponse } from '@/types';
+import { jsonbinStorage } from './jsonbin-storage';
 
+// Legacy localStorage key for backward compatibility during migration
 const FORMS_KEY = 'formify_forms';
 const RESPONSES_KEY = 'formify_responses';
 
+// This is the main storage interface that should be used throughout the app
 export const storage = {
   // Forms
-  getForms: (): Form[] => {
-    if (typeof window === 'undefined') return [];
-    const forms = localStorage.getItem(FORMS_KEY);
-    const parsedForms = forms ? JSON.parse(forms) : [];
-    
-    // Ensure all forms have the new properties with defaults
-    return parsedForms.map((form: any) => ({
-      ...form,
-      theme: form.theme || 'default',
-      accentColor: form.accentColor || '#22c55e',
-      backgroundStyle: form.backgroundStyle || 'gradient',
-      backgroundColor: form.backgroundColor || '#000000',
-      mode: form.mode || 'standard',
-      passingMark: form.passingMark || 70
-    }));
+  getForms: async (): Promise<Form[]> => {
+    // Return empty array - forms are now managed individually in JSONBin
+    return [];
   },
 
-  saveForm: (form: Form): void => {
-    if (typeof window === 'undefined') return;
-    const forms = storage.getForms();
-    const existingIndex = forms.findIndex(f => f.id === form.id);
-    
-    if (existingIndex >= 0) {
-      forms[existingIndex] = form;
-    } else {
-      forms.push(form);
+  saveForm: async (form: Form): Promise<Form | null> => {
+    if (!form.title.trim()) {
+      return null;
     }
+
+    try {
+      // If this is a new form without an existing JSONBin ID, create it
+      const binData = await jsonbinStorage.createForm(form);
+      
+      // Return the form with the JSONBin ID
+      return {
+        ...form,
+        id: binData.binId
+      };
+    } catch (error) {
+      console.error('Error saving form:', error);
+      return null;
+    }
+  },
+
+  getForm: async (id: string): Promise<Form | null> => {
+    if (!id) return null;
     
-    localStorage.setItem(FORMS_KEY, JSON.stringify(forms));
+    try {
+      return await jsonbinStorage.getForm(id);
+    } catch (error) {
+      console.error('Error fetching form:', error);
+      return null;
+    }
   },
 
-  getForm: (id: string): Form | null => {
-    const forms = storage.getForms();
-    return forms.find(f => f.id === id) || null;
-  },
-
-  deleteForm: (id: string): void => {
-    if (typeof window === 'undefined') return;
-    const forms = storage.getForms();
-    const filteredForms = forms.filter(f => f.id !== id);
-    localStorage.setItem(FORMS_KEY, JSON.stringify(filteredForms));
+  deleteForm: async (id: string): Promise<boolean> => {
+    console.warn('Delete form functionality not implemented for JSONBin - forms are permanent once created');
+    return false;
   },
 
   // Responses
-  getResponses: (formId?: string): FormResponse[] => {
-    if (typeof window === 'undefined') return [];
-    const responses = localStorage.getItem(RESPONSES_KEY);
-    const allResponses = responses ? JSON.parse(responses) : [];
+  getResponses: async (formId?: string): Promise<FormResponse[]> => {
+    if (!formId) return [];
     
-    if (formId) {
-      return allResponses.filter((r: FormResponse) => r.formId === formId);
+    try {
+      return await jsonbinStorage.getResponses(formId);
+    } catch (error) {
+      console.error('Error fetching responses:', error);
+      return [];
     }
-    
-    return allResponses;
   },
 
-  saveResponse: (response: FormResponse): void => {
-    if (typeof window === 'undefined') return;
-    const responses = storage.getResponses();
-    responses.push(response);
-    localStorage.setItem(RESPONSES_KEY, JSON.stringify(responses));
+  saveResponse: async (response: FormResponse): Promise<FormResponse | null> => {
+    try {
+      const success = await jsonbinStorage.saveResponse(response.formId, response);
+      return success ? response : null;
+    } catch (error) {
+      console.error('Error saving response:', error);
+      return null;
+    }
   },
 
-  // Utility
+  // Utility functions
   generateId: (): string => {
-    return Math.random().toString(36).substr(2, 9);
-  },
-
-  exportToCSV: (responses: FormResponse[], form: Form): string => {
-    if (responses.length === 0) return '';
-
-    let headers = ['Submission Date'];
-    
-    if (form.mode === 'questionnaire') {
-      headers.push('Student Name', 'Preliminary Score', 'Final Score', 'Max Score');
-    }
-    
-    headers.push(...form.questions.map(q => q.title));
-    
-    const rows = responses.map(response => {
-      const row = [new Date(response.submittedAt).toLocaleString()];
-      
-      if (form.mode === 'questionnaire') {
-        row.push(
-          response.studentName || '',
-          response.preliminaryScore?.toString() || '',
-          response.finalScore?.toString() || '',
-          response.maxScore?.toString() || ''
-        );
-      }
-      
-      form.questions.forEach(question => {
-        const value = response.responses[question.id];
-        if (Array.isArray(value)) {
-          row.push(value.join(', '));
-        } else {
-          row.push(value || '');
-        }
-      });
-      return row;
-    });
-
-    const csvContent = [headers, ...rows]
-      .map(row => row.map(cell => `"${cell}"`).join(','))
-      .join('\n');
-
-    return csvContent;
+    return jsonbinStorage.generateId();
   },
 
   calculateScore: (responses: Record<string, string | string[]>, form: Form): { score: number; maxScore: number } => {
-    if (form.mode !== 'questionnaire') return { score: 0, maxScore: 0 };
-
-    let score = 0;
-    let maxScore = 0;
-
-    form.questions.forEach(question => {
-      if ((question.type === 'multiple-choice' || question.type === 'checkbox') && question.correctAnswer && question.points) {
-        maxScore += question.points;
-        const userAnswer = responses[question.id];
-        
-        if (question.type === 'multiple-choice') {
-          // Handle multiple choice with multiple correct answers
-          if (Array.isArray(question.correctAnswer)) {
-            // Multiple correct answers - user must select all correct answers
-            const correctAnswers = question.correctAnswer;
-            const userAnswers = Array.isArray(userAnswer) ? userAnswer : [userAnswer];
-            
-            // Check if user selected exactly the correct answers (no more, no less)
-            const correctCount = correctAnswers.filter(ans => userAnswers.includes(ans)).length;
-            const incorrectCount = userAnswers.filter(ans => !correctAnswers.includes(ans)).length;
-            
-            if (correctCount === correctAnswers.length && incorrectCount === 0) {
-              score += question.points;
-            }
-          } else {
-            // Single correct answer (backward compatibility)
-            if (userAnswer === question.correctAnswer) {
-              score += question.points;
-            }
-          }
-        } else if (question.type === 'checkbox') {
-          // Handle checkbox questions - user must select all correct answers
-          if (Array.isArray(question.correctAnswer)) {
-            const correctAnswers = question.correctAnswer;
-            const userAnswers = Array.isArray(userAnswer) ? userAnswer : [];
-            
-            // Check if user selected exactly the correct answers (no more, no less)
-            const correctCount = correctAnswers.filter(ans => userAnswers.includes(ans)).length;
-            const incorrectCount = userAnswers.filter(ans => !correctAnswers.includes(ans)).length;
-            
-            if (correctCount === correctAnswers.length && incorrectCount === 0) {
-              score += question.points;
-            }
-          }
-        }
-      }
-    });
-
-    return { score, maxScore };
+    return jsonbinStorage.calculateScore(responses, form);
   },
 
-  // URL-based sharing functions
-  encodeFormToUrl: (form: Form): string => {
+  exportToCSV: (responses: FormResponse[], form: Form): string => {
+    return jsonbinStorage.exportToCSV(responses, form);
+  },
+
+  // Legacy localStorage functions for backward compatibility during development
+  // These will be removed once migration is complete
+  
+  // Form-based sharing functions
+  encodeFormForSharing: (form: Form): string => {
     try {
       const formData = JSON.stringify(form);
-      const encoded = btoa(encodeURIComponent(formData));
+      const encoded = btoa(formData);
       return encoded;
     } catch (error) {
       console.error('Error encoding form:', error);
@@ -178,14 +99,15 @@ export const storage = {
     }
   },
 
-  decodeFormFromUrl: (encodedData: string): Form | null => {
+  decodeFormFromSharing: (encodedData: string): Form | null => {
     try {
-      const decoded = decodeURIComponent(atob(encodedData));
+      const decoded = atob(encodedData);
       const form = JSON.parse(decoded);
       
       // Ensure all required properties exist with defaults
-      return {
+      const processedForm = {
         ...form,
+        id: storage.generateId(), // Generate new ID to avoid conflicts
         theme: form.theme || 'default',
         accentColor: form.accentColor || '#22c55e',
         backgroundStyle: form.backgroundStyle || 'gradient',
@@ -193,6 +115,8 @@ export const storage = {
         mode: form.mode || 'standard',
         passingMark: form.passingMark || 70
       };
+
+      return processedForm;
     } catch (error) {
       console.error('Error decoding form:', error);
       return null;
@@ -245,3 +169,65 @@ export const storage = {
     });
   }
 };
+
+// Legacy localStorage interface for backward compatibility
+// This will be removed once all components are migrated
+const legacyStorage = {
+  getForms: (): Form[] => {
+    if (typeof window === 'undefined') return [];
+    const forms = localStorage.getItem(FORMS_KEY);
+    const parsedForms = forms ? JSON.parse(forms) : [];
+    
+    // Ensure all forms have the new properties with defaults
+    return parsedForms.map((form: any) => ({
+      ...form,
+      theme: form.theme || 'default',
+      accentColor: form.accentColor || '#22c55e',
+      backgroundStyle: form.backgroundStyle || 'gradient',
+      backgroundColor: form.backgroundColor || '#000000',
+      mode: form.mode || 'standard',
+      passingMark: form.passingMark || 70
+    }));
+  },
+
+  saveForm: (form: Form): void => {
+    if (typeof window === 'undefined') return;
+    const forms = legacyStorage.getForms();
+    const existingIndex = forms.findIndex(f => f.id === form.id);
+    
+    if (existingIndex >= 0) {
+      forms[existingIndex] = form;
+    } else {
+      forms.push(form);
+    }
+    
+    localStorage.setItem(FORMS_KEY, JSON.stringify(forms));
+  },
+
+  getForm: (id: string): Form | null => {
+    const forms = legacyStorage.getForms();
+    return forms.find(f => f.id === id) || null;
+  },
+
+  getResponses: (formId?: string): FormResponse[] => {
+    if (typeof window === 'undefined') return [];
+    const responses = localStorage.getItem(RESPONSES_KEY);
+    const allResponses = responses ? JSON.parse(responses) : [];
+    
+    if (formId) {
+      return allResponses.filter((r: FormResponse) => r.formId === formId);
+    }
+    
+    return allResponses;
+  },
+
+  saveResponse: (response: FormResponse): void => {
+    if (typeof window === 'undefined') return;
+    const responses = legacyStorage.getResponses();
+    responses.push(response);
+    localStorage.setItem(RESPONSES_KEY, JSON.stringify(responses));
+  }
+};
+
+// Export both interfaces for migration period
+export { legacyStorage };

@@ -46,9 +46,9 @@ export default function FormBuilderPage() {
           setIsEditing(true);
         }
       } else {
-        // New form
+        // New form - don't auto-save until user provides a title
         const newForm = {
-          id: hybridStorage.generateId(),
+          id: '', // Will be generated when form is actually saved to JSONBin
           title: '',
           description: '',
           questions: [],
@@ -62,8 +62,7 @@ export default function FormBuilderPage() {
           passingMark: 70,
         };
         setForm(newForm);
-        // Save the form immediately so it can be accessed by themes page
-        await hybridStorage.saveForm(newForm);
+        setIsEditing(false);
       }
     };
     
@@ -97,10 +96,12 @@ export default function FormBuilderPage() {
 
     const savedForm = await hybridStorage.saveForm(updatedForm);
     if (savedForm) {
-      alert('Form saved successfully!');
-      router.push('/dashboard');
+      alert('Form saved successfully! Your shareable link has been generated.');
+      setForm(savedForm); // Update form with the returned JSONBin ID
+      setIsEditing(true); // Mark as editing saved form
+      setShowShareOptions(true); // Show share options
     } else {
-      alert('Failed to save form. Please try again.');
+      alert('Failed to save form. Please check your internet connection and try again.');
     }
   };
 
@@ -110,30 +111,21 @@ export default function FormBuilderPage() {
       return;
     }
 
-    // Use Supabase URL if available, otherwise fall back to encoded URL
-    if (hybridStorage.isSupabaseAvailable()) {
-      // Use production domain if available, otherwise current origin
-      const baseUrl = process.env.NODE_ENV === 'production' ? 'https://facsystems.dev' : window.location.origin;
-      const shareUrl = `${baseUrl}/form/${form.id}`;
-      navigator.clipboard.writeText(shareUrl).then(() => {
-        alert('Share link copied to clipboard!');
-      }).catch(() => {
-        alert('Failed to copy link. Please copy manually: ' + shareUrl);
-      });
-    } else {
-      const encodedData = hybridStorage.encodeFormToUrl(form);
-      if (encodedData) {
-        const baseUrl = process.env.NODE_ENV === 'production' ? 'https://facsystems.dev' : window.location.origin;
-        const shareUrl = `${baseUrl}/shared/${encodedData}`;
-        navigator.clipboard.writeText(shareUrl).then(() => {
-          alert('Share link copied to clipboard!');
-        }).catch(() => {
-          alert('Failed to copy link. Please copy manually: ' + shareUrl);
-        });
-      } else {
-        alert('Failed to generate share link');
-      }
+    if (!form.id) {
+      alert('Please save the form first to get a shareable link');
+      return;
     }
+
+    // Use JSONBin form URL
+    const baseUrl = process.env.NODE_ENV === 'production' ? 'https://facsystems.dev' : window.location.origin;
+    const shareUrl = `${baseUrl}/form/${form.id}`;
+    
+    navigator.clipboard.writeText(shareUrl).then(() => {
+      alert('Share link copied to clipboard!\n\n' + shareUrl);
+      setShowShareOptions(true);
+    }).catch(() => {
+      alert('Failed to copy link. Please copy manually: ' + shareUrl);
+    });
   };
 
   const handleDownloadForm = () => {

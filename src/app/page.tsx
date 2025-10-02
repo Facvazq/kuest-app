@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import { ArrowRight, Code, Zap, Sparkles, ExternalLink, X, ChevronDown, Gamepad2, Smartphone } from 'lucide-react';
 import FloatingShapes3D from '@/components/FloatingShapes3D';
+import { LineByLineTypewriter } from '@/components/TypewriterText';
 
 export default function HomePage() {
   const [showContactPopup, setShowContactPopup] = useState(false);
@@ -175,19 +176,29 @@ export default function HomePage() {
           className="max-w-4xl mx-auto"
         >
           <h1 className="text-6xl md:text-8xl font-bold mb-8">
-            <span className="bg-gradient-to-r from-white via-kuest-green-light to-white bg-clip-text text-transparent kuest-3d-rotate">
-              Fac Systems
-            </span>
-            <br />
-            <span className="text-white text-4xl md:text-6xl">
-              Development Portfolio
-            </span>
+            <LineByLineTypewriter
+              lines={[
+                {
+                  text: "Fac Systems",
+                  className: "bg-gradient-to-r from-white via-kuest-green-light to-white bg-clip-text text-transparent kuest-3d-rotate",
+                  speed: 120,
+                  delay: 800
+                },
+                {
+                  text: "Development Portfolio",
+                  className: "text-white text-4xl md:text-2xl",
+                  speed: 120,
+                  delay: 0
+                }
+              ]}
+              showCursor={true}
+            />
           </h1>
           
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
+            transition={{ duration: 0.8, delay: 4.2 }}
             className="text-xl md:text-2xl text-white/80 mb-12 max-w-3xl mx-auto leading-relaxed"
           >
             Innovative web applications and tools designed to solve real-world problems with cutting-edge technology.
@@ -196,7 +207,7 @@ export default function HomePage() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.6 }}
+            transition={{ duration: 0.8, delay: 4.8 }}
             className="flex flex-col sm:flex-row gap-6 justify-center items-center"
           >
             <motion.button

@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { Home, CheckCircle, AlertCircle, Share2, Download, Upload } from 'lucide-react';
 import { Form, FormResponse } from '@/types';
-import { storage } from '@/lib/storage';
+import { hybridStorage } from '@/lib/hybrid-storage';
 import QuestionRenderer from '@/components/QuestionRenderer';
 
 export default function SharedFormPage() {
@@ -91,16 +91,54 @@ export default function SharedFormPage() {
   };
 
   useEffect(() => {
-    if (encodedData) {
-      const decodedForm = storage.decodeFormFromUrl(encodedData);
-      if (decodedForm) {
-        setForm(decodedForm);
+    const loadForm = async () => {
+      if (encodedData) {
+        // Check if this looks like a JSONBin ID (9 characters)
+        if (encodedData.length === 9 && /[a-z0-9]{9}/.test(encodedData)) {
+          // It's a JSONBin ID - fetch the form
+          const formFromJsonBin = await hybridStorage.getForm(encodedData);
+          if (formFromJsonBin) {
+            setForm(formFromJsonBin);
+            // Initialize responses object
+            const initialResponses: Record<string, string | string[]> = {};
+            formFromJsonBin.questions.forEach(question => {
+              if (question.type === 'checkbox') {
+                initialResponses[question.id] = [];
+              } else {
+                initialResponses[question.id] = '';
+              }
+            });
+            setResponses(initialResponses);
+          } else {
+            setError('Form not found. The link may be invalid or the form may have been deleted.');
+          }
+        } else {
+          // It's legacy encoded data - decode it for backward compatibility
+          const decodedForm = hybridStorage.decodeFormFromSharing(encodedData);
+          if (decodedForm) {
+            setForm(decodedForm);
+            // Initialize responses object
+            const initialResponses: Record<string, string | string[]> = {};
+            decodedForm.questions.forEach(question => {
+              if (question.type === 'checkbox') {
+                initialResponses[question.id] = [];
+              } else {
+                initialResponses[question.id] = '';
+              }
+            });
+            setResponses(initialResponses);
+          } else {
+            setError('Invalid form data. Please check the link.');
+          }
+        }
         setLoading(false);
       } else {
-        setError('Invalid form data. Please check the link.');
+        setError('No form data provided.');
         setLoading(false);
       }
-    }
+    };
+
+    loadForm();
   }, [encodedData]);
 
   const handleResponseChange = (questionId: string, value: string | string[]) => {
@@ -137,7 +175,7 @@ export default function SharedFormPage() {
     let calculatedMaxScore = 0;
     
     if (form.mode === 'questionnaire') {
-      const scoreResult = storage.calculateScore(responses, form);
+      const scoreResult = hybridStorage.calculateScore(responses, form);
       calculatedScore = scoreResult.score;
       calculatedMaxScore = scoreResult.maxScore;
       setPreliminaryScore({ score: calculatedScore, maxScore: calculatedMaxScore });
@@ -145,7 +183,7 @@ export default function SharedFormPage() {
 
     // Save response
     const newResponse: FormResponse = {
-      id: storage.generateId(),
+      id: hybridStorage.generateId(),
       formId: form.id,
       responses,
       submittedAt: new Date().toISOString(),
@@ -154,7 +192,7 @@ export default function SharedFormPage() {
       maxScore: form.mode === 'questionnaire' ? calculatedMaxScore : undefined,
     };
 
-    storage.saveResponse(newResponse);
+    await hybridStorage.saveResponse(newResponse);
     setSubmitted(true);
   };
 
@@ -169,7 +207,7 @@ export default function SharedFormPage() {
 
   const downloadForm = () => {
     if (form) {
-      storage.exportFormToFile(form);
+      hybridStorage.exportFormToFile(form);
     }
   };
 

@@ -13,6 +13,8 @@ export default function DashboardPage() {
 
   useEffect(() => {
     const loadForms = async () => {
+      // Since JSONBin stores forms individually, we'll show an empty dashboard
+      // with a message to create new forms
       const savedForms = await hybridStorage.getForms();
       setForms(savedForms);
       setLoading(false);
