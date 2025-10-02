@@ -20,13 +20,10 @@ export const storage = {
 
     try {
       // If this is a new form without an existing JSONBin ID, create it
-      const binData = await jsonbinStorage.createForm(form);
+      const savedForm = await jsonbinStorage.createForm(form);
       
-      // Return the form with the JSONBin ID
-      return {
-        ...form,
-        id: binData.binId
-      };
+      // Return the saved form
+      return savedForm;
     } catch (error) {
       console.error('Error saving form:', error);
       return null;

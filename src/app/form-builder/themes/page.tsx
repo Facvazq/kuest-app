@@ -20,16 +20,19 @@ export default function ThemesPage() {
     
     if (id && id !== 'new') {
       setFormId(id);
-      const savedForm = storage.getForm(id);
-      if (savedForm) {
-        setForm(savedForm);
-        setSelectedTheme((savedForm.theme as 'light' | 'dark' | 'default' | 'electric' | 'warm' | 'royal') || 'default');
-        setSelectedAccentColor(savedForm.accentColor || '#22c55e');
-        setSelectedBackgroundStyle((savedForm.backgroundStyle as 'solid' | 'gradient' | 'pattern') || 'gradient');
-      } else {
-        // Form not found, redirect back to form builder
-        window.location.href = '/form-builder';
-      }
+      const loadForm = async () => {
+        const savedForm = await storage.getForm(id);
+        if (savedForm) {
+          setForm(savedForm);
+          setSelectedTheme((savedForm.theme as 'light' | 'dark' | 'default' | 'electric' | 'warm' | 'royal') || 'default');
+          setSelectedAccentColor(savedForm.accentColor || '#22c55e');
+          setSelectedBackgroundStyle((savedForm.backgroundStyle as 'solid' | 'gradient' | 'pattern') || 'gradient');
+        } else {
+          // Form not found, redirect back to form builder
+          window.location.href = '/form-builder';
+        }
+      };
+      loadForm();
     } else if (id === 'new') {
       // Handle new form - create a temporary form
       const tempForm: Form = {

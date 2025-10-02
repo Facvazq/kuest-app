@@ -23,11 +23,11 @@ export default function ResponsesPage() {
   const [tempScore, setTempScore] = useState<number>(0);
 
   useEffect(() => {
-    const loadData = () => {
-      const foundForm = storage.getForm(formId);
+    const loadData = async () => {
+      const foundForm = await storage.getForm(formId);
       if (foundForm) {
         setForm(foundForm);
-        const formResponses = storage.getResponses(formId);
+        const formResponses = await storage.getResponses(formId);
         setResponses(formResponses);
         
         // Generate chart data for multiple choice and checkbox questions

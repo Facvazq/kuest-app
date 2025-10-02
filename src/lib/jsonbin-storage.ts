@@ -54,7 +54,7 @@ const calculateScore = (responses: Record<string, string | string[]>, form: Form
       
       maxScore += question.points;
       
-      if (selectedAnswer?.toLowerCase().trim() === question.correctAnswer.toLowerCase().trim()) {
+      if (selectedAnswer?.toLowerCase().trim() === question.correctAnswer?.toString().toLowerCase().trim()) {
         score += question.points;
       }
     }

@@ -86,10 +86,13 @@ export const supabaseStorage = {
 
   saveForm: async (form: Form, userId?: string): Promise<Form | null> => {
     try {
+      console.log('🔄 Supabase saveForm called for:', form.title);
       const formData = formToDatabase(form, userId);
+      console.log('📊 Form data to save:', formData);
       
       let query;
       if (form.id && form.id.length > 0) {
+        console.log('🔄 Updating existing form:', form.id);
         // Update existing form
         query = supabase
           .from('forms')
@@ -98,6 +101,7 @@ export const supabaseStorage = {
           .select()
           .single();
       } else {
+        console.log('➕ Creating new form');
         // Create new form
         query = supabase
           .from('forms')
@@ -109,13 +113,19 @@ export const supabaseStorage = {
       const { data, error } = await query;
 
       if (error) {
-        console.error('Error saving form:', error);
+        console.error('❌ Supabase error details:', {
+          code: error.code,
+          message: error.message,
+          details: error.details,
+          hint: error.hint
+        });
         return null;
       }
 
+      console.log('✅ Form saved to Supabase successfully:', data.id);
       return databaseToForm(data);
     } catch (error) {
-      console.error('Error saving form:', error);
+      console.error('❌ Unexpected error in saveForm:', error);
       return null;
     }
   },
