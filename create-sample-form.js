@@ -2,8 +2,8 @@
 const { createClient } = require('@supabase/supabase-js');
 
 // Replace with your actual Supabase credentials
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://your-project-ref.supabase.co';
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'your-anon-key-here';
+const supabaseUrl = 'https://dmnzsckdnzapycpektjn.supabase.co';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRtbnpzY2tkbnphcHljcGVrdGpuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTkzNjE2NDUsImV4cCI6MjA3NDkzNzY0NX0.hz5MOMc1UON9JyeAO2zgU5mTqamfn8UU48Ja_4BbCRM';
 
 const supabase = createClient(supabaseUrl, supabaseKey);
 
@@ -60,14 +60,14 @@ const sampleForm = {
       ratingScale: 5
     }
   ],
-  createdAt: new Date().toISOString(),
-  updatedAt: new Date().toISOString(),
+  created_at: new Date().toISOString(),
+  updated_at: new Date().toISOString(),
   theme: 'default',
-  accentColor: '#22c55e',
-  backgroundStyle: 'gradient',
-  backgroundColor: '#000000',
+  accent_color: '#22c55e', // Changed to match database column name
+  background_style: 'gradient', // Changed to match database column name
+  background_color: '#000000', // Changed to match database column name
   mode: 'questionnaire',
-  passingMark: 70,
+  passing_mark: 70, // Changed to match database column name
   is_public: true
 };
 
@@ -95,12 +95,5 @@ async function createSampleForm() {
   }
 }
 
-// Check if Supabase is configured
-if (supabaseUrl === 'https://your-project-ref.supabase.co' || supabaseKey === 'your-anon-key-here') {
-  console.log('❌ Supabase not configured. Please set up your environment variables first.');
-  console.log('Create a .env.local file with:');
-  console.log('NEXT_PUBLIC_SUPABASE_URL=https://your-project-ref.supabase.co');
-  console.log('NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key-here');
-} else {
-  createSampleForm();
-}
+// Create the sample form
+createSampleForm();
