@@ -311,11 +311,124 @@ export default function HomePage() {
               </div>
             </motion.div>
 
+            {/* Auto DMV Project Card */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 1.8 }}
+              className="kuest-glass rounded-3xl p-8 kuest-3d-hover"
+            >
+              <div className="flex flex-col lg:flex-row items-center gap-8">
+                <div className="flex-1">
+                  <div className="flex items-center space-x-3 mb-4">
+                    <div className="w-12 h-12 bg-gradient-to-r from-red-500 to-orange-600 rounded-xl flex items-center justify-center">
+                      <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                      </svg>
+                    </div>
+                    <h3 className="text-3xl font-bold text-white">Auto DMV</h3>
+                    <span className="px-3 py-1 bg-green-500/20 text-green-400 rounded-full text-sm font-medium">
+                      Coming this month!
+                    </span>
+                  </div>
+                  
+                  <p className="text-lg text-white/80 mb-6 leading-relaxed">
+                    Auto DMV is a free, web-based CAD/MDT system designed for role-play servers. It provides streamlined tools for managing player data, vehicles, licenses, and law enforcement records, all accessible from any browser. Easy to set up, lightweight, and perfect for police, EMS, and civilian role-play communities.
+                  </p>
+
+                  <div className="flex flex-wrap gap-3 mb-6">
+                    {['CAD', 'MDT', 'Roleplay', 'Free', 'Web App', 'PoliceRP', 'RP', 'Roleplay Servers', 'No Credit Card Required'].map((tag) => (
+                      <motion.span 
+                        key={tag}
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ delay: 1.9 + Math.random() * 0.3 }}
+                        whileHover={{ scale: 1.05, y: -2 }}
+                        className={`px-3 py-1 rounded-lg text-sm kuest-glow-hover transition-all duration-300 ${
+                          tag === 'CAD' || tag === 'MDT' ? 'bg-red-500/20 text-red-300' :
+                          tag === 'Free' || tag === 'No Credit Card Required' ? 'bg-green-500/20 text-green-300' :
+                          tag === 'Roleplay' || tag === 'RP' || tag === 'PoliceRP' || tag === 'Roleplay Servers' ? 'bg-purple-500/20 text-purple-300' :
+                          'bg-blue-500/20 text-blue-300'
+                        }`}
+                      >
+                        {tag}
+                      </motion.span>
+                    ))}
+                  </div>
+
+                  <div className="flex flex-col sm:flex-row gap-4">
+                    <motion.button
+                      whileHover={{ scale: 1.05, y: -2 }}
+                      whileTap={{ scale: 0.95 }}
+                      className="bg-white/10 backdrop-blur-md text-white px-6 py-3 rounded-lg font-semibold border border-white/20 hover:bg-white/20 transition-all duration-300 flex items-center space-x-2"
+                    >
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                      <span>Coming Soon</span>
+                    </motion.button>
+                  </div>
+                </div>
+
+                <div className="flex-1 max-w-md">
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.8, delay: 2.0 }}
+                    className="kuest-glass rounded-2xl p-6 kuest-3d-float"
+                  >
+                    <div className="space-y-4">
+                      <div className="flex items-center space-x-2">
+                        <svg className="w-5 h-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                        <span className="text-white font-medium">System Features</span>
+                      </div>
+                      <ul className="space-y-3 text-white/80">
+                        {[
+                          { icon: "👮", text: "Police Records Management" },
+                          { icon: "🚗", text: "Vehicle Registration" },
+                          { icon: "📋", text: "License Management" },
+                          { icon: "🏥", text: "EMS Records" },
+                          { icon: "🌐", text: "Browser-Based Access" },
+                          { icon: "⚡", text: "Lightweight & Fast" }
+                        ].map((item, index) => (
+                          <motion.li 
+                            key={index}
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: 2.2 + index * 0.1 }}
+                            className="flex items-center space-x-3"
+                          >
+                            <motion.span 
+                              className="text-lg"
+                              animate={{ 
+                                rotate: [0, 10, -10, 0],
+                                scale: [1, 1.1, 1]
+                              }}
+                              transition={{ 
+                                duration: 2,
+                                repeat: Infinity,
+                                delay: index * 0.2
+                              }}
+                            >
+                              {item.icon}
+                            </motion.span>
+                            <span>{item.text}</span>
+                          </motion.li>
+                        ))}
+                      </ul>
+                    </div>
+                  </motion.div>
+                </div>
+              </div>
+            </motion.div>
+
             {/* Track Cleared Project Card */}
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 1.6 }}
+              transition={{ duration: 0.8, delay: 2.4 }}
               className="kuest-glass rounded-3xl p-8 kuest-3d-hover"
             >
               <div className="flex flex-col lg:flex-row items-center gap-8">
@@ -342,7 +455,7 @@ export default function HomePage() {
                         key={tag}
                         initial={{ opacity: 0, scale: 0.8 }}
                         animate={{ opacity: 1, scale: 1 }}
-                        transition={{ delay: 1.7 + Math.random() * 0.3 }}
+                        transition={{ delay: 2.5 + Math.random() * 0.3 }}
                         whileHover={{ scale: 1.05, y: -2 }}
                         className={`px-3 py-1 rounded-lg text-sm kuest-glow-hover transition-all duration-300 ${
                           tag === 'Game' ? 'bg-blue-500/20 text-blue-300' :
@@ -372,7 +485,7 @@ export default function HomePage() {
                   <motion.div
                     initial={{ opacity: 0, scale: 0.9 }}
                     animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.8, delay: 1.8 }}
+                    transition={{ duration: 0.8, delay: 2.6 }}
                     className="kuest-glass rounded-2xl p-6 kuest-3d-float"
                   >
                     <div className="space-y-4">
@@ -393,7 +506,7 @@ export default function HomePage() {
                             key={index}
                             initial={{ opacity: 0, x: -20 }}
                             animate={{ opacity: 1, x: 0 }}
-                            transition={{ delay: 2.0 + index * 0.1 }}
+                            transition={{ delay: 2.8 + index * 0.1 }}
                             className="flex items-center space-x-3"
                           >
                             <motion.span 
@@ -425,7 +538,7 @@ export default function HomePage() {
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 2.2 }}
+            transition={{ duration: 0.8, delay: 3.0 }}
             className="kuest-glass rounded-3xl p-8 text-center mt-8"
           >
             <div className="max-w-2xl mx-auto">
