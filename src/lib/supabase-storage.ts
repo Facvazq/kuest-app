@@ -9,10 +9,10 @@ const formToDatabase = (form: Form, userId?: string): Omit<DatabaseForm, 'id' | 
   theme: form.theme,
   accent_color: form.accentColor,
   background_style: form.backgroundStyle,
-  background_color: form.backgroundColor,
+  background_color: form.backgroundColor || '#000000',
   mode: form.mode,
   passing_mark: form.passingMark || 70,
-  user_id: userId || null,
+  user_id: userId || undefined,
   is_public: true, // Default to public for easy sharing
 });
 
@@ -40,7 +40,7 @@ const responseToDatabase = (response: FormResponse, userId?: string): Omit<Datab
   preliminary_score: response.preliminaryScore,
   final_score: response.finalScore,
   max_score: response.maxScore,
-  user_id: userId || null,
+  user_id: userId || undefined,
 });
 
 // Convert DatabaseFormResponse to FormResponse

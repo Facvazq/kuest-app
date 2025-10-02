@@ -164,7 +164,7 @@ export default function FormBuilderPage() {
     }
 
     const newQuestion: Question = {
-      id: storage.generateId(),
+      id: hybridStorage.generateId(),
       type,
       title: '',
       emoji: '',
@@ -223,7 +223,7 @@ export default function FormBuilderPage() {
 
   const QuestionForm = () => {
     const [question, setQuestion] = useState<Question>(editingQuestion || {
-      id: storage.generateId(),
+      id: hybridStorage.generateId(),
       type: form.mode === 'questionnaire' ? 'multiple-choice' : 'text',
       title: '',
       emoji: '',

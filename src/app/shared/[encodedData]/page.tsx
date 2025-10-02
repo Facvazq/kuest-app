@@ -221,7 +221,7 @@ export default function SharedFormPage() {
   }
 
   if (submitted) {
-    const styles = getThemeStyles(form);
+    const styles = getThemeStyles(form!);
     return (
       <div className={`min-h-screen ${styles.background}`}>
         <motion.div
@@ -234,9 +234,9 @@ export default function SharedFormPage() {
               <CheckCircle className="w-12 h-12 text-green-600 dark:text-green-400" />
             </div>
             <h2 className={`text-2xl font-bold ${styles.text} mb-2`}>
-              {form.mode === 'questionnaire' ? 'Quiz Submitted!' : 'Thank You!'}
+              {form!.mode === 'questionnaire' ? 'Quiz Submitted!' : 'Thank You!'}
             </h2>
-            {form.mode === 'questionnaire' && preliminaryScore ? (
+            {form!.mode === 'questionnaire' && preliminaryScore ? (
               <div className={`${styles.card} p-6 rounded-xl mb-6 max-w-md mx-auto`}>
                 <h3 className={`text-lg font-semibold ${styles.text} mb-4`}>Preliminary Results</h3>
                 <div className="space-y-2">
@@ -251,8 +251,8 @@ export default function SharedFormPage() {
                   </p>
                   <p className={`${styles.textSecondary}`}>
                     <strong>Status:</strong> 
-                    <span className={`ml-2 ${(preliminaryScore.score / preliminaryScore.maxScore) * 100 >= (form.passingMark || 70) ? 'text-green-400' : 'text-red-400'}`}>
-                      {(preliminaryScore.score / preliminaryScore.maxScore) * 100 >= (form.passingMark || 70) ? 'PASSED' : 'FAILED'}
+                    <span className={`ml-2 ${(preliminaryScore.score / preliminaryScore.maxScore) * 100 >= (form!.passingMark || 70) ? 'text-green-400' : 'text-red-400'}`}>
+                      {(preliminaryScore.score / preliminaryScore.maxScore) * 100 >= (form!.passingMark || 70) ? 'PASSED' : 'FAILED'}
                     </span>
                   </p>
                 </div>
@@ -361,9 +361,6 @@ export default function SharedFormPage() {
                   value={studentName}
                   onChange={(e) => setStudentName(e.target.value)}
                   className={`w-full px-4 py-3 rounded-lg ${styles.input} focus:outline-none focus:ring-2 focus:ring-opacity-50`}
-                  style={{ 
-                    focusRingColor: form.accentColor 
-                  }}
                   placeholder="Enter your name"
                   required
                 />

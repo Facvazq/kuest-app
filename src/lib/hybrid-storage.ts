@@ -3,11 +3,11 @@ import { storage } from './storage';
 import { supabaseStorage } from './supabase-storage';
 
 // Check if Supabase is configured
-const isSupabaseConfigured = () => {
-  return process.env.NEXT_PUBLIC_SUPABASE_URL && 
+const isSupabaseConfigured = (): boolean => {
+  return !!(process.env.NEXT_PUBLIC_SUPABASE_URL && 
          process.env.NEXT_PUBLIC_SUPABASE_URL !== 'https://your-project-ref.supabase.co' &&
          process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY && 
-         process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY !== 'your-anon-key-here';
+         process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY !== 'your-anon-key-here');
 };
 
 export const hybridStorage = {
