@@ -20,7 +20,7 @@ export default function HomePage() {
   const projectsRef = useRef<HTMLDivElement>(null);
 
   const scrollToProjects = () => {
-    projectsRef.current?.scrollTo({
+    projectsRef.current?.scrollIntoView({
       behavior: 'smooth',
       block: 'start'
     });
