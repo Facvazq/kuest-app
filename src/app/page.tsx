@@ -661,6 +661,7 @@ export default function HomePage() {
                     <motion.button
                       whileHover={{ scale: 1.05, y: -2 }}
                       whileTap={{ scale: 0.95 }}
+                      onClick={() => window.open('https://discord.gg/YfH7j28S', '_blank')}
                       className="bg-gradient-to-r from-indigo-500 to-purple-600 text-white px-6 py-3 rounded-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 flex items-center space-x-2 hover:from-indigo-600 hover:to-purple-700"
                     >
                       <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
