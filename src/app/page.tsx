@@ -27,7 +27,7 @@ export default function HomePage() {
   };
 
   const updateCountdown = () => {
-    const targetDate = new Date('2024-10-30T00:00:00').getTime();
+    const targetDate = new Date('2026-01-01T00:00:00').getTime();
     const now = new Date().getTime();
     const difference = Math.max(0, targetDate - now);
 
