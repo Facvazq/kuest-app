@@ -10,12 +10,37 @@ import { LineByLineTypewriter } from '@/components/TypewriterText';
 export default function HomePage() {
   const [showContactPopup, setShowContactPopup] = useState(false);
   const [showMaintenanceModal, setShowMaintenanceModal] = useState(false);
+  const [showCountdownModal, setShowCountdownModal] = useState(false);
+  const [timeLeft, setTimeLeft] = useState({
+    days: 0,
+    hours: 0,
+    minutes: 0,
+    seconds: 0
+  });
   const projectsRef = useRef<HTMLDivElement>(null);
 
   const scrollToProjects = () => {
-    projectsRef.current?.scrollIntoView({ 
+    projectsRef.current?.scrollTo({
       behavior: 'smooth',
       block: 'start'
+    });
+  };
+
+  const updateCountdown = () => {
+    const targetDate = new Date('2024-10-30T00:00:00').getTime();
+    const now = new Date().getTime();
+    const difference = Math.max(0, targetDate - now);
+
+    const days = String(Math.floor(difference / (1000 * 60 * 60 * 24))).padStart(2, '0');
+    const hours = String(Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).padStart(2, '0');
+    const minutes = String(Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
+    const seconds = String(Math.floor((difference % (1000 * 60)) / 1000)).padStart(2, '0');
+
+    setTimeLeft({
+      days: parseInt(days),
+      hours: parseInt(hours),
+      minutes: parseInt(minutes),
+      seconds: parseInt(seconds)
     });
   };
 
@@ -40,6 +65,20 @@ export default function HomePage() {
       window.history.replaceState({}, document.title, '/');
     }
   }, []);
+
+  // Countdown timer effect
+  useEffect(() => {
+    updateCountdown();
+    const timer = setInterval(updateCountdown, 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  // Update countdown when modal opens
+  useEffect(() => {
+    if (showCountdownModal) {
+      updateCountdown();
+    }
+  }, [showCountdownModal]);
 
   return (
     <div className="min-h-screen bg-black relative overflow-hidden">
@@ -547,6 +586,7 @@ export default function HomePage() {
                     <motion.button
                       whileHover={{ scale: 1.05, y: -2 }}
                       whileTap={{ scale: 0.95 }}
+                      onClick={() => setShowCountdownModal(true)}
                       className="bg-white/10 backdrop-blur-md text-white px-6 py-3 rounded-lg font-semibold border border-white/20 hover:bg-white/20 transition-all duration-300 flex items-center space-x-2"
                     >
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -935,6 +975,108 @@ export default function HomePage() {
           </div>
         </div>
       </motion.footer>
+
+      {/* Countdown Modal */}
+      <AnimatePresence>
+        {showCountdownModal && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50"
+          onClick={() => setShowCountdownModal(false)}
+        >
+          <motion.div
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0.8, opacity: 0 }}
+            transition={{ type: "spring", duration: 0.5 }}
+            className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-3xl p-8 max-w-md w-full mx-4 relative overflow-hidden border border-white/10"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Animated background elements */}
+            <div className="absolute inset-0 overflow-hidden">
+              <motion.div
+                className="absolute -top-10 -right-10 w-20 h-20 bg-green-500/20 rounded-full blur-xl"
+                animate={{
+                  scale: [1, 1.2, 1],
+                  opacity: [0.3, 0.6, 0.3]
+                }}
+                transition={{ duration: 2, repeat: Infinity }}
+              />
+              <motion.div
+                className="absolute -bottom-10 -left-10 w-16 h-16 bg-green-500/20 rounded-full blur-xl"
+                animate={{
+                  scale: [1, 1.2, 1],
+                  opacity: [0.3, 0.6, 0.3]
+                }}
+                transition={{ duration: 2, repeat: Infinity, delay: 1 }}
+              />
+            </div>
+
+            <div className="relative text-center">
+              {/* Title */}
+              <motion.h2 
+                className="text-3xl font-semibold text-white mb-6 bg-gradient-to-r from-green-400 via-emerald-300 to-green-500 bg-clip-text text-transparent"
+                whileInView={{ y: [-10, 0], opacity: [0, 1] }}
+                transition={{ duration: 0.5 }}
+              >
+                Coming Soon...
+              </motion.h2>
+
+              {/* Countdown Display */}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mb-6">
+                {Object.entries(timeLeft).map(([unit, value], index) => (
+                  <motion.div
+                    key={unit}
+                    className="bg-black/30 hover:bg-black/40 backdrop-blur-md font-medium border border-white/10 rounded-xl p-3 text-sm transition-all duration-300"
+                    initial={{ y: 20, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    transition={{ delay: index * 0.1 }}
+                  >
+                    <motion.div
+                      className="text-2xl font-bold text-transparent bg-gradient-to-br from-green-400 via-emerald-300 to-green-500 bg-clip-text"
+                      key={value} // Re-animate when value changes
+                      initial={{ scale: 0.8 }}
+                      animate={{ scale: 1 }}
+                      transition={{ type: "spring", duration: 0.3 }}
+                    >
+                      {String(value).padStart(2, '0')}
+                    </motion.div>
+                    <div className="text-[10px] text-gray-400 uppercase tracking-wider mt-1">
+                      {unit}
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+
+              {/* Custom hint text */}
+              <motion.p 
+                className="text-gray-300 mb-6 text-sm leading-relaxed"
+                whileInView={{ y: [10, 0], opacity: [0, 1] }}
+                transition={{ duration: 0.5, delay: 0.3 }}
+              >
+                Something special is brewing...
+                <br />
+                Get ready for an exciting announcement!
+              </motion.p>
+
+              {/* Dismiss button */}
+              <motion.button
+                className="w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:to-green-700 from-green-500 h-10 relative overflow-hidden group text-sm font-medium whitespace-nowrap text-white shadow-[0_4px_15px_rgba(167,243,208,0.3)] hover:shadow-[0_4px_25px_rgba(167,243,208,0.4)] transition-all duration-300 rounded-lg flex items-center justify-center space-x-2"
+                whileTap={{ scale: 0.97 }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.6 }}
+                onClick={() => setShowCountdownModal(false)}
+              >
+                <span>Close</span>
+              </motion.button>
+            </div>
+          </motion.div>
+        </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
