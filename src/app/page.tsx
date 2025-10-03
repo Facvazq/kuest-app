@@ -657,7 +657,7 @@ export default function HomePage() {
                     ))}
                   </div>
 
-                  <div className="flex flex-col sm:flex-row gap-4">
+                  <div className="flex justify-start">
                     <motion.button
                       whileHover={{ scale: 1.05, y: -2 }}
                       whileTap={{ scale: 0.95 }}
@@ -668,15 +668,6 @@ export default function HomePage() {
                         <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.249a18.27 18.27 0 0 0-5.487 0c-.21-.375-.444-.864-.608-1.249a.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-5.487-2.464.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 4.35-3.359.074.074 0 0 1 .128-.008zm8.02 15.33c-1.183 0-2.157-1.085-2.157-2.42 0-1.336.956-2.42 2.157-2.42s2.176 1.096 2.157 2.42c0 1.335-.956 2.42-2.157 2.42zm7.975 0c-1.183 0-2.157-1.085-2.157-2.42 0-1.336.955-2.42 2.157-2.42s2.176 1.096 2.157 2.42c0 1.335-.974 2.42-2.157 2.42z"/>
                       </svg>
                       <span>Apply for Beta Tester in 2 Steps</span>
-                    </motion.button>
-                    
-                    <motion.button
-                      whileHover={{ scale: 1.05, y: -2 }}
-                      whileTap={{ scale: 0.95 }}
-                      className="bg-white/10 backdrop-blur-md text-white px-6 py-3 rounded-lg font-semibold border border-white/20 hover:bg-white/20 transition-all duration-300 flex items-center space-x-2"
-                    >
-                      <Smartphone className="w-4 h-4" />
-                      <span>Learn More</span>
                     </motion.button>
                   </div>
                 </div>
