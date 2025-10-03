@@ -656,9 +656,23 @@ export default function HomePage() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 2.4 }}
-              className="kuest-glass rounded-3xl p-8 kuest-3d-hover"
+              className="kuest-glass rounded-3xl p-8 kuest-3d-hover relative group"
             >
-              <div className="flex flex-col lg:flex-row items-center gap-8">
+              {/* Blurry overlay on hover */}
+              <div className="absolute inset-0 bg-black/20 backdrop-blur-sm rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10 pointer-events-none flex items-center justify-center">
+                <motion.div 
+                  initial={{ scale: 0.8, opacity: 0 }}
+                  whileHover={{ scale: 1.05 }}
+                  className="bg-gradient-to-r from-blue-600/30 to-purple-600/30 backdrop-blur-md rounded-xl px-6 py-4 border border-blue-400/50"
+                >
+                  <div className="text-center">
+                    <div className="text-white text-xl font-bold mb-2">🔒 Coming Soon</div>
+                    <div className="text-blue-200 text-sm">Beta launching November 2025</div>
+                  </div>
+                </motion.div>
+              </div>
+              
+              <div className="flex flex-col lg:flex-row items-center gap-8 relative z-20">
                 <div className="flex-1">
                   <div className="flex items-center space-x-3 mb-4">
                     <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
