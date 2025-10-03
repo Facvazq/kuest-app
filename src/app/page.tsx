@@ -438,6 +438,7 @@ export default function HomePage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 1.0 }}
               className="kuest-glass rounded-3xl p-8 kuest-3d-hover"
+              data-section="kuest"
             >
               <div className="flex flex-col lg:flex-row items-center gap-8">
                 <div className="flex-1">
@@ -678,13 +679,17 @@ export default function HomePage() {
                   
                   {/* Separator line */}
                   <div className="border-t border-gray-200 mt-4 pt-4">
-                    {/* Action buttons */}
-                    <div className="flex justify-end space-x-2">
-                      <button className="px-4 py-2 text-sm font-medium text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors">
-                        Cancel
-                      </button>
-                      <button className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors">
-                        OK
+                    {/* Action button */}
+                    <div className="flex justify-center">
+                      <button 
+                        onClick={() => {
+                          const kuestSection = document.querySelector('[data-section="kuest"]');
+                          kuestSection?.scrollIntoView({ behavior: 'smooth' });
+                        }}
+                        className="px-6 py-3 text-sm font-medium text-white bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-300 flex items-center space-x-2 shadow-lg"
+                      >
+                        <span>🕐</span>
+                        <span>I will wait</span>
                       </button>
                     </div>
                   </div>
