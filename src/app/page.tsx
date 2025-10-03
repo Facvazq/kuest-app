@@ -659,11 +659,11 @@ export default function HomePage() {
               className="kuest-glass rounded-3xl p-8 kuest-3d-hover relative group"
             >
               {/* Modal overlay on hover */}
-              <div className="absolute inset-0 bg-black/50 backdrop-blur-sm rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10 pointer-events-none flex items-center justify-center">
+              <div className="absolute inset-0 bg-black/50 backdrop-blur-sm rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-50 pointer-events-none flex items-center justify-center">
                 <motion.div 
                   initial={{ scale: 0.9, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
-                  className="bg-white/90 backdrop-blur-md rounded-2xl p-6 max-w-sm mx-4 shadow-xl"
+                  className="bg-white/95 backdrop-blur-md rounded-2xl p-6 max-w-sm mx-4 shadow-2xl border border-gray-200 relative z-50"
                 >
                   {/* Header */}
                   <div className="text-center border-b border-gray-200 pb-3 mb-4">
@@ -691,7 +691,7 @@ export default function HomePage() {
                 </motion.div>
               </div>
               
-              <div className="flex flex-col lg:flex-row items-center gap-8 relative z-20">
+              <div className="flex flex-col lg:flex-row items-center gap-8 relative z-20 group-hover:blur-sm transition-all duration-300">
                 <div className="flex-1">
                   <div className="flex items-center space-x-3 mb-4">
                     <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
