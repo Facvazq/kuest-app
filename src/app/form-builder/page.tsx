@@ -482,13 +482,50 @@ export default function FormBuilderPage() {
   };
 
   return (
-    <div className="min-h-screen gradient-bg dark:gradient-bg-dark">
-      <div className="container mx-auto px-4 py-8">
+    <div className="min-h-screen bg-black relative overflow-hidden">
+      {/* Animated Background */}
+      <div className="absolute inset-0 overflow-hidden">
+        {/* Glowing green dots */}
+        <div className="absolute inset-0 flex items-center justify-center">
+          {Array.from({ length: 30 }).map((_, i) => (
+            <div
+              key={i}
+              className="absolute w-1 h-1 bg-green-400 rounded-full animate-pulse"
+              style={{
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
+                animationDelay: `${Math.random() * 3}s`,
+                animationDuration: `${2 + Math.random() * 2}s`
+              }}
+            />
+          ))}
+        </div>
+        
+        {/* Network lines */}
+        <div className="absolute inset-0">
+          {Array.from({ length: 20 }).map((_, i) => (
+            <div
+              key={i}
+              className="absolute h-px bg-green-400 opacity-20"
+              style={{
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
+                width: `${10 + Math.random() * 100}px`,
+                transform: `rotate(${Math.random() * 360}deg)`,
+                animation: `pulse 2s infinite`,
+                animationDelay: `${Math.random() * 2}s`
+              }}
+            />
+          ))}
+        </div>
+      </div>
+      
+      <div className="relative z-10 container mx-auto px-4 py-8">
         {/* Navigation */}
         <nav className="flex justify-between items-center mb-8">
-          <Link href="/dashboard" className="flex items-center space-x-2 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors">
+          <Link href="/" className="flex items-center space-x-2 text-white hover:text-green-400 transition-colors">
             <ArrowLeft className="w-5 h-5" />
-            <span>Back to Dashboard</span>
+            <span>Back to Home</span>
           </Link>
         </nav>
 
@@ -499,17 +536,18 @@ export default function FormBuilderPage() {
           className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-12"
         >
           <div>
-            <h1 className="text-4xl font-bold kuest-text-gradient mb-2">
-              {isEditing ? 'Edit Kuest' : 'Create New Kuest'}
+            <h1 className="text-4xl font-bold mb-2">
+              <span className="text-white">{isEditing ? 'Edit' : 'Create'}</span>
+              <span className="text-green-400"> Kuest</span>
             </h1>
-            <p className="text-gray-600 dark:text-gray-300 text-lg">Build your kuest with different question types</p>
+            <p className="text-white/70 text-lg">Build your form with different question types</p>
           </div>
           <div className="flex space-x-3 mt-4 sm:mt-0">
             <Link href={`/form-builder/themes?id=${form.id || 'new'}`}>
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="kuest-glass text-white px-4 py-2 rounded-lg font-semibold hover:bg-kuest-green/20 transition-all duration-300 flex items-center"
+                className="bg-green-600/20 backdrop-blur-md text-white px-4 py-2 rounded-lg font-semibold border border-green-400/30 hover:border-green-400/50 transition-all duration-300 flex items-center"
               >
                 <Settings className="w-4 h-4 mr-2" />
                 Themes
@@ -519,7 +557,7 @@ export default function FormBuilderPage() {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={handleSaveForm}
-              className="kuest-gradient text-white px-6 py-2 rounded-xl font-semibold kuest-glow kuest-glow-hover kuest-3d-hover transition-all duration-300 flex items-center"
+              className="bg-green-400 text-white px-6 py-2 rounded-xl font-semibold hover:bg-green-300 transition-all duration-300 flex items-center"
             >
               <Save className="w-4 h-4 mr-2" />
               Save Kuest
@@ -528,7 +566,7 @@ export default function FormBuilderPage() {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => setShowShareOptions(!showShareOptions)}
-              className="kuest-gradient text-white px-6 py-2 rounded-xl font-semibold kuest-glow kuest-glow-hover kuest-3d-hover transition-all duration-300 flex items-center"
+              className="bg-green-600/20 backdrop-blur-md text-white px-6 py-2 rounded-xl font-semibold border border-green-400/30 hover:border-green-400/50 transition-all duration-300 flex items-center"
             >
               <Share2 className="w-4 h-4 mr-2" />
               Share
@@ -543,32 +581,32 @@ export default function FormBuilderPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="glass dark:glass-dark rounded-2xl p-8"
+              className="bg-gray-900/10 backdrop-blur-md border border-green-400/20 rounded-2xl p-8"
             >
               {/* Form Details */}
               <div className="space-y-6 mb-8">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Form Title</label>
+                  <label className="block text-sm font-medium text-white mb-2">Form Title</label>
                   <input
                     type="text"
                     value={form.title}
                     onChange={(e) => setForm({ ...form, title: e.target.value })}
-                    className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+                    className="w-full px-4 py-3 border border-green-400/30 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-green-400 bg-black/20 backdrop-blur-md text-white placeholder-white/50"
                     placeholder="Enter form title"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Form Description</label>
+                  <label className="block text-sm font-medium text-white mb-2">Form Description</label>
                   <textarea
                     value={form.description}
                     onChange={(e) => setForm({ ...form, description: e.target.value })}
                     rows={3}
-                    className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+                    className="w-full px-4 py-3 border border-green-400/30 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-green-400 bg-black/20 backdrop-blur-md text-white placeholder-white/50"
                     placeholder="Enter form description"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Form Mode</label>
+                  <label className="block text-sm font-medium text-white mb-2">Form Mode</label>
                   <div className="flex items-center space-x-4">
                     <label className="flex items-center">
                       <input
@@ -577,9 +615,9 @@ export default function FormBuilderPage() {
                         value="standard"
                         checked={form.mode === 'standard'}
                         onChange={(e) => setForm({ ...form, mode: e.target.value as 'standard' | 'questionnaire' })}
-                        className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 dark:border-gray-600"
+                        className="h-4 w-4 text-green-400 focus:ring-green-400 border-green-400/30"
                       />
-                      <span className="ml-2 text-sm text-gray-700 dark:text-gray-300">Standard Form</span>
+                      <span className="ml-2 text-sm text-white">Standard Form</span>
                     </label>
                     <label className="flex items-center">
                       <input
@@ -588,18 +626,18 @@ export default function FormBuilderPage() {
                         value="questionnaire"
                         checked={form.mode === 'questionnaire'}
                         onChange={(e) => setForm({ ...form, mode: e.target.value as 'standard' | 'questionnaire' })}
-                        className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 dark:border-gray-600"
+                        className="h-4 w-4 text-green-400 focus:ring-green-400 border-green-400/30"
                       />
-                      <span className="ml-2 text-sm text-gray-700 dark:text-gray-300">Questionnaire Mode</span>
+                      <span className="ml-2 text-sm text-white">Questionnaire Mode</span>
                     </label>
                   </div>
                   {form.mode === 'questionnaire' && (
                     <div className="mt-4 space-y-4">
-                      <p className="text-sm text-blue-600 dark:text-blue-400">
+                      <p className="text-sm text-green-400">
                         ⚠️ Questionnaire Mode: Only multiple choice and checkbox questions allowed. Each question needs a correct answer and points.
                       </p>
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        <label className="block text-sm font-medium text-white mb-2">
                           Passing Mark (%)
                         </label>
                         <input
@@ -608,10 +646,10 @@ export default function FormBuilderPage() {
                           max="100"
                           value={form.passingMark || 70}
                           onChange={(e) => setForm({ ...form, passingMark: parseInt(e.target.value) || 70 })}
-                          className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+                          className="w-full px-3 py-2 border border-green-400/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-green-400 bg-black/20 backdrop-blur-md text-white"
                           placeholder="70"
                         />
-                        <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                        <p className="text-xs text-white/70 mt-1">
                           Percentage required to pass (e.g., 70 for 70%)
                         </p>
                       </div>
@@ -622,34 +660,34 @@ export default function FormBuilderPage() {
 
               {/* Questions */}
               <div className="space-y-6">
-                <h3 className="text-xl font-semibold text-gray-900 dark:text-white">Questions</h3>
+                <h3 className="text-xl font-semibold text-white">Questions</h3>
                 {form.questions.map((question, index) => (
                   <motion.div
                     key={question.id}
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: index * 0.1 }}
-                    className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-6 hover:shadow-lg transition-all duration-300"
+                    className="bg-gray-900/10 backdrop-blur-md border border-green-400/20 rounded-xl p-6 hover:border-green-400/40 transition-all duration-300"
                   >
                     <div className="flex justify-between items-start mb-4">
                       <div className="flex-1">
                         <div className="flex items-center space-x-2 mb-2">
                           {question.emoji && <span className="text-lg">{question.emoji}</span>}
-                          <span className="text-sm text-gray-500 dark:text-gray-400">Question {index + 1}</span>
+                          <span className="text-sm text-white/70">Question {index + 1}</span>
                         </div>
-                        <h4 className="font-semibold text-gray-900 dark:text-white text-lg">{question.title}</h4>
+                        <h4 className="font-semibold text-white text-lg">{question.title}</h4>
                         <div className="flex items-center space-x-2 mt-1">
-                          <span className="text-xs text-gray-500 dark:text-gray-400 capitalize bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded">
+                          <span className="text-xs text-green-400 bg-green-400/10 px-2 py-1 rounded">
                             {question.type.replace('-', ' ')}
                           </span>
                           {question.required && (
-                            <span className="text-xs text-red-500 bg-red-100 dark:bg-red-900/20 px-2 py-1 rounded">
+                            <span className="text-xs text-white bg-red-500/20 px-2 py-1 rounded">
                               Required
                             </span>
                           )}
                         </div>
                         {question.helpText && (
-                          <p className="text-sm text-gray-600 dark:text-gray-300 mt-2">{question.helpText}</p>
+                          <p className="text-sm text-white/70 mt-2">{question.helpText}</p>
                         )}
                       </div>
                       <div className="flex space-x-2">
@@ -675,7 +713,7 @@ export default function FormBuilderPage() {
                         </motion.button>
                       </div>
                     </div>
-                    <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                    <div className="bg-black/20 backdrop-blur-md p-4 rounded-lg border border-green-400/10">
                       <QuestionRenderer
                         question={question}
                         value=""
@@ -743,22 +781,22 @@ export default function FormBuilderPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4 }}
-              className="glass dark:glass-dark rounded-2xl p-6 sticky top-8"
+              className="bg-gray-900/10 backdrop-blur-md border border-green-400/20 rounded-2xl p-6 sticky top-8"
             >
               <div className="flex items-center justify-between mb-6">
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Preview</h3>
-                <Eye className="w-5 h-5 text-gray-500 dark:text-gray-400" />
+                <h3 className="text-lg font-semibold text-white">Preview</h3>
+                <Eye className="w-5 h-5 text-white/70" />
               </div>
               {form.title ? (
                 <div className="space-y-4">
-                  <div className="text-center pb-4 border-b border-gray-200 dark:border-gray-700">
-                    <h4 className="text-xl font-semibold text-gray-900 dark:text-white">{form.title}</h4>
+                  <div className="text-center pb-4 border-b border-green-400/20">
+                    <h4 className="text-xl font-semibold text-white">{form.title}</h4>
                     {form.description && (
-                      <p className="text-gray-600 dark:text-gray-300 mt-2 text-sm">{form.description}</p>
+                      <p className="text-white/70 mt-2 text-sm">{form.description}</p>
                     )}
                   </div>
                   {form.questions.map((question) => (
-                    <div key={question.id} className="border-b border-gray-200 dark:border-gray-700 pb-4 last:border-b-0">
+                    <div key={question.id} className="border-b border-green-400/20 pb-4 last:border-b-0">
                       <QuestionRenderer
                         question={question}
                         value=""
@@ -770,10 +808,10 @@ export default function FormBuilderPage() {
                 </div>
               ) : (
                 <div className="text-center py-12">
-                  <div className="w-16 h-16 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Eye className="w-8 h-8 text-gray-400" />
+                  <div className="w-16 h-16 bg-green-400/10 backdrop-blur-md rounded-full flex items-start justify-center mx-auto mb-4 border border-green-400/20">
+                    <Eye className="w-8 h-8 text-green-400" />
                   </div>
-                  <p className="text-gray-500 dark:text-gray-400">Add a title to see preview</p>
+                  <p className="text-white/70">Add a title to see preview</p>
                 </div>
               )}
             </motion.div>
