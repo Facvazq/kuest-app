@@ -843,7 +843,7 @@ export default function HomePage() {
                     <img 
                       src="/profile-photo.jpg" 
                       alt="Profile Photo" 
-                      className="w-full h-full object-cover object-center object-top"
+                      className="w-full h-full object-cover object-center object-top blur-sm"
                       style={{ objectPosition: 'center -10%' }}
                     />
                   </div>
