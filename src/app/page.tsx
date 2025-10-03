@@ -658,23 +658,35 @@ export default function HomePage() {
               transition={{ duration: 0.8, delay: 2.4 }}
               className="kuest-glass rounded-3xl p-8 kuest-3d-hover relative group"
             >
-              {/* Blurry overlay on hover */}
-              <div className="absolute inset-0 bg-black/30 backdrop-blur-md rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10 pointer-events-none flex items-center justify-center relative">
-                {/* Chain emojis scattered around */}
-                <div className="absolute top-6 left-6 text-white/60 text-2xl">⚓</div>
-                <div className="absolute top-8 right-8 text-white/60 text-xl">🔗</div>
-                <div className="absolute bottom-6 left-8 text-white/60 text-lg">⛓️</div>
-                <div className="absolute bottom-8 right-6 text-white/60 text-lg">🔗</div>
-                
+              {/* Modal overlay on hover */}
+              <div className="absolute inset-0 bg-black/50 backdrop-blur-sm rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10 pointer-events-none flex items-center justify-center">
                 <motion.div 
-                  initial={{ scale: 0.8, opacity: 0 }}
-                  whileHover={{ scale: 1.05 }}
-                  className="bg-gradient-to-r from-blue-600/30 to-purple-600/30 backdrop-blur-md rounded-xl px-6 py-4 border border-blue-400/50"
+                  initial={{ scale: 0.9, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  className="bg-white/90 backdrop-blur-md rounded-2xl p-6 max-w-sm mx-4 shadow-xl"
                 >
-                  <div className="text-center">
-                    <div className="text-white text-4xl mb-3">🛡️</div>
-                    <div className="text-white text-xl font-bold mb-2">Coming Soon</div>
-                    <div className="text-blue-200 text-sm">Beta launching November 2025</div>
+                  {/* Header */}
+                  <div className="text-center border-b border-gray-200 pb-3 mb-4">
+                    <h3 className="text-xl font-bold text-gray-800">Coming Soon</h3>
+                  </div>
+                  
+                  {/* Body text */}
+                  <div className="text-gray-600 text-sm leading-relaxed mb-4">
+                    This project is currently under development and will be available soon. 
+                    Beta version launching in November 2025.
+                  </div>
+                  
+                  {/* Separator line */}
+                  <div className="border-t border-gray-200 mt-4 pt-4">
+                    {/* Action buttons */}
+                    <div className="flex justify-end space-x-2">
+                      <button className="px-4 py-2 text-sm font-medium text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors">
+                        Cancel
+                      </button>
+                      <button className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors">
+                        OK
+                      </button>
+                    </div>
                   </div>
                 </motion.div>
               </div>
