@@ -839,11 +839,11 @@ export default function HomePage() {
                   whileHover={{ scale: 1.05 }}
                   className="relative"
                 >
-                  <div className="w-32 h-32 rounded-full border-4 border-green-400/30 flex items-center justify-center mb-4 overflow-hidden">
+                  <div className="w-32 h-32 rounded-full border-4 border-green-400/30 flex items-center justify-center mb-4 overflow-hidden bg-green-400/10">
                     <img 
                       src="/profile-photo.jpg" 
                       alt="Profile Photo" 
-                      className="w-full h-full object-cover blur-[1px]"
+                      className="w-full h-full object-cover object-center blur-[1px] scale-110"
                       style={{ objectPosition: 'center -5%' }}
                     />
                   </div>
