@@ -847,11 +847,6 @@ export default function HomePage() {
                       style={{ objectPosition: 'center -5%' }}
                     />
                   </div>
-                  <motion.div
-                    animate={{ rotate: [0, 360] }}
-                    transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                    className="absolute -top-2 -right-2 w-6 h-6 border-2 border-green-400 border-t-transparent rounded-full"
-                  ></motion.div>
                 </motion.div>
                 
                 {/* Status indicators */}
