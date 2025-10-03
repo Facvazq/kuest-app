@@ -844,7 +844,7 @@ export default function HomePage() {
                       src="/profile-photo.jpg" 
                       alt="Profile Photo" 
                       className="w-full h-full object-cover object-center object-top"
-                      style={{ objectPosition: 'center 15%' }}
+                      style={{ objectPosition: 'center -10%' }}
                     />
                   </div>
                   <motion.div
