@@ -6,7 +6,7 @@ import Script from 'next/script'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Fac Systems - Development Portfolio',
+  title: 'Fac Systems - Tools for everybody',
   description: 'Innovative web applications and tools designed to solve real-world problems. Explore Kuest and other cutting-edge projects.',
   metadataBase: new URL('https://facsystems.dev'),
   icons: {
