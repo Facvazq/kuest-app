@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import { ArrowRight, Code, Zap, Sparkles, ExternalLink, X, ChevronDown, Gamepad2, Smartphone, Shield } from 'lucide-react';
+import Image from 'next/image';
 import FloatingShapes3D from '@/components/FloatingShapes3D';
 import { LineByLineTypewriter } from '@/components/TypewriterText';
 
@@ -637,7 +638,7 @@ export default function HomePage() {
               <div className="flex flex-col items-center lg:items-start">
                 <div className="relative">
                   <div className="w-32 h-32 rounded-full border-4 border-green-400/30 flex items-center justify-center mb-4 overflow-hidden bg-green-400/10">
-                    <img src="/profile-photo.jpg" alt="Profile Photo" className="w-full h-full object-cover object-center blur-[1px] scale-110" style={{objectPosition: 'center -5%'}} />
+                    <Image src="/profile-photo.jpg" alt="Profile Photo" width={128} height={128} className="w-full h-full object-cover object-center blur-[1px] scale-110" style={{objectPosition: 'center -5%'}} />
                   </div>
                 </div>
                 <div className="flex items-center space-x-2 mb-2">
@@ -737,9 +738,9 @@ export default function HomePage() {
                   <Code className="w-8 h-8 text-white" />
                 </div>
                 
-                <h3 className="text-2xl font-bold text-white mb-4">Let's Build Something Amazing</h3>
+                <h3 className="text-2xl font-bold text-white mb-4">Let&apos;s Build Something Amazing</h3>
                 <p className="text-white/70 mb-6">
-                  Tell me about your project idea! Whether it's a web app, iOS app, or something completely different, I'd love to hear about it.
+                  Tell me about your project idea! Whether it&apos;s a web app, iOS app, or something completely different, I&apos;d love to hear about it.
                 </p>
                 
                 <div className="kuest-glass rounded-xl p-4 mb-6">
