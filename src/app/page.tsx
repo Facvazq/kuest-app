@@ -298,14 +298,14 @@ export default function HomePage() {
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
-              className="bg-gradient-to-br from-green-50 to-blue-50 rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 relative overflow-hidden"
+              className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-200 relative overflow-hidden opacity-75"
             >
               <div className="absolute top-0 right-0 bg-orange-500 text-white px-3 py-1 text-sm font-semibold rounded-bl-lg">
                 Under Construction
-                    </div>
-              <div className="bg-gradient-to-r from-green-500 to-blue-500 rounded-xl p-4 w-16 h-16 flex items-center justify-center mb-6">
+              </div>
+              <div className="bg-gradient-to-r from-gray-400 to-gray-500 rounded-xl p-4 w-16 h-16 flex items-center justify-center mb-6">
                 <Gamepad2 className="w-8 h-8 text-white" />
-                  </div>
+              </div>
               <h3 className="text-2xl font-bold text-gray-900 mb-4">Kuest</h3>
               <p className="text-gray-600 mb-6">
                 Interactive quiz builder that lets you create engaging quizzes, surveys, and assessments. 
@@ -329,24 +329,24 @@ export default function HomePage() {
                   <span>Multi-language support</span>
                 </div>
               </div>
-              <Link href="/signium" className="w-full bg-gradient-to-r from-green-500 to-blue-500 text-white py-3 px-6 rounded-lg font-semibold hover:from-green-600 hover:to-blue-600 transition-all duration-200 text-center block">
-                Try Kuest
-              </Link>
+              <button className="w-full bg-gradient-to-r from-gray-400 to-gray-500 text-white py-3 px-6 rounded-lg font-semibold opacity-50 cursor-not-allowed">
+                Coming Soon
+              </button>
             </motion.div>
 
             {/* Signium Tool */}
-                  <motion.div
+            <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.1 }}
-              className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 relative overflow-hidden"
+              className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 border-2 border-green-200 relative overflow-hidden green-aura"
             >
-              <div className="absolute top-0 right-0 bg-orange-500 text-white px-3 py-1 text-sm font-semibold rounded-bl-lg">
-                Under Construction
-                      </div>
-              <div className="bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl p-4 w-16 h-16 flex items-center justify-center mb-6">
+              <div className="absolute top-0 right-0 bg-green-500 text-white px-3 py-1 text-sm font-semibold rounded-bl-lg animate-pulse">
+                ✨ Latest
+              </div>
+              <div className="bg-gradient-to-r from-green-500 to-emerald-500 rounded-xl p-4 w-16 h-16 flex items-center justify-center mb-6 shadow-lg" style={{ boxShadow: '0 0 20px rgba(34, 197, 94, 0.4)' }}>
                 <Trophy className="w-8 h-8 text-white" />
-                    </div>
+              </div>
               <h3 className="text-2xl font-bold text-gray-900 mb-4">Signium</h3>
               <p className="text-gray-600 mb-6">
                 Tournament and conquest platform that allows you to create competitive events, manage participants, 
@@ -370,7 +370,7 @@ export default function HomePage() {
                   <span>Prize & reward management</span>
                 </div>
               </div>
-              <Link href="/signium" className="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white py-3 px-6 rounded-lg font-semibold hover:from-purple-600 hover:to-pink-600 transition-all duration-200 text-center block">
+              <Link href="/signium" className="w-full bg-gradient-to-r from-green-500 to-emerald-500 text-white py-3 px-6 rounded-lg font-semibold hover:from-green-600 hover:to-emerald-600 transition-all duration-200 text-center block shadow-lg hover:shadow-xl transform hover:scale-105" style={{ boxShadow: '0 0 20px rgba(34, 197, 94, 0.3)' }}>
                 Try Signium
               </Link>
             </motion.div>

@@ -168,6 +168,20 @@ a:focus {
   outline-offset: 2px;
 }
 
+/* Green aura animation */
+@keyframes greenAura {
+  0%, 100% {
+    box-shadow: 0 0 30px rgba(34, 197, 94, 0.3), 0 0 60px rgba(34, 197, 94, 0.1);
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(34, 197, 94, 0.5), 0 0 80px rgba(34, 197, 94, 0.2);
+  }
+}
+
+.green-aura {
+  animation: greenAura 3s ease-in-out infinite;
+}
+
 /* Print styles */
 @media print {
   .no-print {
