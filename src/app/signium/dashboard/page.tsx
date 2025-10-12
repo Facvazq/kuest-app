@@ -375,7 +375,10 @@ export default function SigniumDashboard() {
                     <div className="flex justify-between items-center mb-6">
                       <h2 className="text-xl font-bold text-gray-900">Your Events</h2>
                       <button
-                        onClick={() => setShowCreateModal(true)}
+                        onClick={() => {
+                          console.log('Create Event button clicked');
+                          setShowCreateModal(true);
+                        }}
                         className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-4 py-2 rounded-lg font-medium hover:from-purple-700 hover:to-pink-700 transition-all duration-200 flex items-center shadow-lg hover:shadow-xl transform hover:scale-105"
                       >
                         <Plus className="w-4 h-4 mr-2" />
@@ -570,7 +573,10 @@ export default function SigniumDashboard() {
               <h3 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
               <div className="space-y-3">
                 <button 
-                  onClick={() => setShowCreateModal(true)}
+                  onClick={() => {
+                    console.log('Quick Actions Create Event button clicked');
+                    setShowCreateModal(true);
+                  }}
                   className="w-full flex items-center p-3 text-left hover:bg-gray-50 rounded-lg transition-colors"
                 >
                   <Plus className="w-5 h-5 text-purple-600 mr-3" />
