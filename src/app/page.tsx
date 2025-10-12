@@ -3,8 +3,9 @@
 import { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
-import { ArrowRight, Check, Star, Users, Zap, Shield, Globe, Smartphone, BarChart3, Headphones, Award, TrendingUp, Clock, Target, Lightbulb, Rocket } from 'lucide-react';
+import { ArrowRight, Check, Star, Users, Zap, Shield, Globe, Smartphone, BarChart3, Headphones, Award, TrendingUp, Clock, Target, Lightbulb, Rocket, Wrench, Gamepad2, Trophy } from 'lucide-react';
 import Image from 'next/image';
+import AnimatedGlobe from '@/components/AnimatedGlobe';
 
 export default function HomePage() {
   const [isContactOpen, setIsContactOpen] = useState(false);
@@ -28,43 +29,49 @@ export default function HomePage() {
   const pricingPlans = [
     {
       name: "Starter",
-      price: "$99",
-      period: "/month",
-      description: "Perfect for small businesses getting started",
+      price: "Free",
+      period: "",
+      description: "Perfect for individuals and small teams",
       features: [
-        "Up to 5 team members",
+        "Access to Kuest (Quiz Builder)",
+        "Access to Signium (Tournament Platform)",
         "Basic analytics dashboard",
-        "Email support",
+        "Community support",
         "Standard integrations",
         "Mobile app access",
-        "Basic reporting"
+        "Basic reporting",
+        "Up to 3 team members"
       ],
       popular: false,
       color: "from-blue-500 to-blue-600"
     },
     {
-      name: "Professional",
-      price: "$299",
+      name: "ONE",
+      price: "$29",
       period: "/month",
-      description: "Ideal for growing businesses",
+      description: "Ideal for growing businesses and teams",
       features: [
-        "Up to 25 team members",
+        "Access to all Fac Systems apps",
         "Advanced analytics & insights",
         "Priority support",
         "Custom integrations",
         "Advanced reporting",
         "API access",
-        "White-label options"
+        "White-label options",
+        "Up to 25 team members",
+        "Advanced tournament features",
+        "Custom quiz templates"
       ],
       popular: true,
       color: "from-purple-500 to-purple-600"
     },
     {
       name: "Enterprise",
-      price: "$799",
+      price: "$199",
       period: "/month",
-      description: "For large organizations",
+      description: "For large organizations and enterprises",
       features: [
+        "Access to all Fac Systems apps",
         "Unlimited team members",
         "Custom analytics suite",
         "24/7 dedicated support",
@@ -72,7 +79,10 @@ export default function HomePage() {
         "Custom development",
         "SLA guarantee",
         "On-premise deployment",
-        "Advanced security"
+        "Advanced security",
+        "Custom branding",
+        "Dedicated account manager",
+        "Training & onboarding"
       ],
       popular: false,
       color: "from-green-500 to-green-600"
@@ -83,7 +93,7 @@ export default function HomePage() {
     { number: "500+", label: "Happy Clients", icon: Users },
     { number: "99.9%", label: "Uptime Guarantee", icon: Shield },
     { number: "24/7", label: "Support Available", icon: Headphones },
-    { number: "50+", label: "Countries Served", icon: Globe }
+    { number: "150+", label: "Countries Served", icon: Globe }
   ];
 
   const services = [
@@ -153,6 +163,7 @@ export default function HomePage() {
             <div className="hidden md:block">
               <div className="ml-10 flex items-baseline space-x-8">
                 <a href="#services" className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors">Services</a>
+                <a href="#tools" className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors">Tools</a>
                 <a href="#pricing" className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors">Pricing</a>
                 <a href="#about" className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors">About</a>
                 <a href="#contact" className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors">Contact</a>
@@ -204,9 +215,22 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Stats Section */}
-      <section className="py-20 bg-white">
+      {/* Global Reach Section */}
+      <section className="py-20 bg-gradient-to-br from-blue-50 to-purple-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">Global Reach</h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Serving businesses and individuals across the globe with our innovative technology solutions
+            </p>
+          </div>
+          
+          {/* Animated Globe */}
+          <div className="mb-16">
+            <AnimatedGlobe />
+          </div>
+
+          {/* Stats Grid */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {stats.map((stat, index) => (
               <motion.div
@@ -216,7 +240,7 @@ export default function HomePage() {
                 transition={{ duration: 0.6, delay: index * 0.1 }}
                 className="text-center"
               >
-                <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-2xl p-6 mb-4">
+                <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
                   <stat.icon className="w-8 h-8 text-blue-600 mx-auto mb-2" />
                   <div className="text-3xl font-bold text-gray-900 mb-1">{stat.number}</div>
                   <div className="text-gray-600 font-medium">{stat.label}</div>
@@ -255,6 +279,101 @@ export default function HomePage() {
                 </div>
               </motion.div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Tools Section */}
+      <section id="tools" className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">Our Tools</h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Powerful applications built by Fac Systems to help you create, engage, and grow your audience
+            </p>
+          </div>
+          <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+            {/* Kuest Tool */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              className="bg-gradient-to-br from-green-50 to-blue-50 rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 relative overflow-hidden"
+            >
+              <div className="absolute top-0 right-0 bg-orange-500 text-white px-3 py-1 text-sm font-semibold rounded-bl-lg">
+                Under Construction
+              </div>
+              <div className="bg-gradient-to-r from-green-500 to-blue-500 rounded-xl p-4 w-16 h-16 flex items-center justify-center mb-6">
+                <Gamepad2 className="w-8 h-8 text-white" />
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">Kuest</h3>
+              <p className="text-gray-600 mb-6">
+                Interactive quiz builder that lets you create engaging quizzes, surveys, and assessments. 
+                Perfect for education, marketing, and team building with real-time analytics and beautiful designs.
+              </p>
+              <div className="space-y-3 mb-6">
+                <div className="flex items-center text-sm text-gray-600">
+                  <Check className="w-4 h-4 text-green-500 mr-2" />
+                  <span>Drag & drop quiz builder</span>
+                </div>
+                <div className="flex items-center text-sm text-gray-600">
+                  <Check className="w-4 h-4 text-green-500 mr-2" />
+                  <span>Real-time analytics dashboard</span>
+                </div>
+                <div className="flex items-center text-sm text-gray-600">
+                  <Check className="w-4 h-4 text-green-500 mr-2" />
+                  <span>Custom branding & themes</span>
+                </div>
+                <div className="flex items-center text-sm text-gray-600">
+                  <Check className="w-4 h-4 text-green-500 mr-2" />
+                  <span>Multi-language support</span>
+                </div>
+              </div>
+              <button className="w-full bg-gradient-to-r from-green-500 to-blue-500 text-white py-3 px-6 rounded-lg font-semibold hover:from-green-600 hover:to-blue-600 transition-all duration-200 opacity-50 cursor-not-allowed">
+                Coming Soon
+              </button>
+            </motion.div>
+
+            {/* Signium Tool */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 relative overflow-hidden"
+            >
+              <div className="absolute top-0 right-0 bg-orange-500 text-white px-3 py-1 text-sm font-semibold rounded-bl-lg">
+                Under Construction
+              </div>
+              <div className="bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl p-4 w-16 h-16 flex items-center justify-center mb-6">
+                <Trophy className="w-8 h-8 text-white" />
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">Signium</h3>
+              <p className="text-gray-600 mb-6">
+                Tournament and conquest platform that allows you to create competitive events, manage participants, 
+                and track results. Perfect for gaming tournaments, sports events, and business competitions.
+              </p>
+              <div className="space-y-3 mb-6">
+                <div className="flex items-center text-sm text-gray-600">
+                  <Check className="w-4 h-4 text-green-500 mr-2" />
+                  <span>Tournament bracket management</span>
+                </div>
+                <div className="flex items-center text-sm text-gray-600">
+                  <Check className="w-4 h-4 text-green-500 mr-2" />
+                  <span>Player registration system</span>
+                </div>
+                <div className="flex items-center text-sm text-gray-600">
+                  <Check className="w-4 h-4 text-green-500 mr-2" />
+                  <span>Live score tracking</span>
+                </div>
+                <div className="flex items-center text-sm text-gray-600">
+                  <Check className="w-4 h-4 text-green-500 mr-2" />
+                  <span>Prize & reward management</span>
+                </div>
+              </div>
+              <button className="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white py-3 px-6 rounded-lg font-semibold hover:from-purple-600 hover:to-pink-600 transition-all duration-200 opacity-50 cursor-not-allowed">
+                Coming Soon
+              </button>
+            </motion.div>
           </div>
         </div>
       </section>
