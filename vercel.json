@@ -1,0 +1,23 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "package.json",
+      "use": "@vercel/next"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/signium/(.*)",
+      "dest": "/signium/$1"
+    }
+  ],
+  "env": {
+    "NEXT_PUBLIC_APP_URL": "https://signium.vercel.app"
+  },
+  "functions": {
+    "src/app/api/**/*.js": {
+      "maxDuration": 30
+    }
+  }
+}

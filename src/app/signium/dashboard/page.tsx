@@ -31,7 +31,6 @@ import {
   Filter,
   Search,
   ArrowUpRight,
-  Bot,
   MessageSquare
 } from 'lucide-react';
 
@@ -96,6 +95,14 @@ export default function SigniumDashboard() {
   // Event handlers
   const handleEditEvent = (event: Event) => {
     setSelectedEvent(event);
+    setEditEventData({
+      name: event.name,
+      type: event.type,
+      date: event.date,
+      time: event.time,
+      location: event.location,
+      maxParticipants: event.maxParticipants
+    });
     setShowEditModal(true);
   };
 
@@ -114,32 +121,91 @@ export default function SigniumDashboard() {
 
   const handleViewEvent = (event: Event) => {
     // Navigate to event details page or show event info
-    alert(`Viewing event: ${event.name}`);
+    console.log(`Viewing event: ${event.name}`);
   };
 
   const handleShareEvent = (event: Event) => {
     // Copy event link to clipboard
     const eventLink = `https://signium.app/event/${event.id}`;
     navigator.clipboard.writeText(eventLink);
-    alert(`Event link copied to clipboard: ${eventLink}`);
+    console.log(`Event link copied to clipboard: ${eventLink}`);
   };
 
+  const [newEventData, setNewEventData] = useState({
+    name: "",
+    type: "Conference",
+    date: "",
+    time: "",
+    location: "",
+    maxParticipants: 100
+  });
+
+  const [editEventData, setEditEventData] = useState({
+    name: "",
+    type: "Conference",
+    date: "",
+    time: "",
+    location: "",
+    maxParticipants: 100
+  });
+
   const handleCreateEvent = () => {
-    // Add new event logic here
+    if (!newEventData.name || !newEventData.date || !newEventData.time) {
+      console.log("Please fill in all required fields (Name, Date, Time)");
+      return;
+    }
+
     const newEvent: Event = {
       id: Date.now(),
-      name: "New Event",
-      type: "Conference",
-      date: "2024-04-15",
-      time: "10:00",
-      location: "TBD",
+      name: newEventData.name,
+      type: newEventData.type,
+      date: newEventData.date,
+      time: newEventData.time,
+      location: newEventData.location || "TBD",
       participants: 0,
-      maxParticipants: 100,
+      maxParticipants: newEventData.maxParticipants,
       status: "active",
       coverImage: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=400&h=200&fit=crop"
     };
+    
     setEvents([...events, newEvent]);
+    setNewEventData({
+      name: "",
+      type: "Conference",
+      date: "",
+      time: "",
+      location: "",
+      maxParticipants: 100
+    });
     setShowCreateModal(false);
+    console.log(`Event "${newEvent.name}" created successfully!`);
+  };
+
+  const handleUpdateEvent = () => {
+    if (!editEventData.name || !editEventData.date || !editEventData.time) {
+      console.log("Please fill in all required fields (Name, Date, Time)");
+      return;
+    }
+
+    if (selectedEvent) {
+      const updatedEvents = events.map(event => 
+        event.id === selectedEvent.id 
+          ? { 
+              ...event, 
+              name: editEventData.name,
+              type: editEventData.type,
+              date: editEventData.date,
+              time: editEventData.time,
+              location: editEventData.location,
+              maxParticipants: editEventData.maxParticipants
+            }
+          : event
+      );
+      setEvents(updatedEvents);
+      setShowEditModal(false);
+      setSelectedEvent(null);
+      console.log(`Event "${editEventData.name}" updated successfully!`);
+    }
   };
 
   const analytics = {
@@ -511,31 +577,18 @@ export default function SigniumDashboard() {
                   <span className="text-gray-700">Create New Event</span>
                 </button>
                 <button 
-                  onClick={() => {
-                    setActiveTab('participants');
-                    alert('Navigate to participant invitation');
-                  }}
+                  onClick={() => setActiveTab('participants')}
                   className="w-full flex items-center p-3 text-left hover:bg-gray-50 rounded-lg transition-colors"
                 >
                   <Users className="w-5 h-5 text-blue-600 mr-3" />
                   <span className="text-gray-700">Invite Participants</span>
                 </button>
                 <button 
-                  onClick={() => {
-                    setActiveTab('analytics');
-                    alert('Navigate to analytics dashboard');
-                  }}
+                  onClick={() => setActiveTab('analytics')}
                   className="w-full flex items-center p-3 text-left hover:bg-gray-50 rounded-lg transition-colors"
                 >
                   <BarChart3 className="w-5 h-5 text-green-600 mr-3" />
                   <span className="text-gray-700">View Analytics</span>
-                </button>
-                <button 
-                  onClick={() => alert('AI Assistant: How can I help you optimize your events today?')}
-                  className="w-full flex items-center p-3 text-left hover:bg-gray-50 rounded-lg transition-colors"
-                >
-                  <Bot className="w-5 h-5 text-pink-600 mr-3" />
-                  <span className="text-gray-700">AI Assistant</span>
                 </button>
               </div>
             </div>
@@ -556,24 +609,6 @@ export default function SigniumDashboard() {
               </div>
             </div>
 
-            {/* AI Assistant */}
-            <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl p-6 border border-purple-100">
-              <div className="flex items-center mb-4">
-                <div className="p-2 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg mr-3">
-                  <Bot className="w-5 h-5 text-white" />
-                </div>
-                <h3 className="text-lg font-semibold text-gray-900">AI Assistant</h3>
-              </div>
-              <p className="text-sm text-gray-600 mb-4">
-                Get suggestions for better event titles, descriptions, and optimal timing.
-              </p>
-              <button 
-                onClick={() => alert('AI Assistant: I can help you with:\n\n• Optimize event titles and descriptions\n• Suggest best times for your events\n• Generate social media captions\n• Analyze participant engagement\n• Detect potential spam signups\n\nWhat would you like help with?')}
-                className="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white py-2 px-4 rounded-lg font-medium hover:from-purple-700 hover:to-pink-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105"
-              >
-                Ask AI Assistant
-              </button>
-            </div>
           </div>
         </div>
       </div>
@@ -596,39 +631,94 @@ export default function SigniumDashboard() {
               onClick={(e) => e.stopPropagation()}
             >
               <h2 className="text-xl font-bold text-gray-900 mb-4">Create New Event</h2>
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Event Name</label>
-                  <input type="text" className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" placeholder="Enter event name" />
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Event Name *</label>
+                    <input 
+                      type="text" 
+                      value={newEventData.name}
+                      onChange={(e) => setNewEventData({...newEventData, name: e.target.value})}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" 
+                      placeholder="Enter event name" 
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Event Type</label>
+                    <select 
+                      value={newEventData.type}
+                      onChange={(e) => setNewEventData({...newEventData, type: e.target.value})}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                    >
+                      <option value="Tournament">Tournament</option>
+                      <option value="Course">Course</option>
+                      <option value="Conference">Conference</option>
+                      <option value="Meetup">Meetup</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Date *</label>
+                    <input 
+                      type="date" 
+                      value={newEventData.date}
+                      onChange={(e) => setNewEventData({...newEventData, date: e.target.value})}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" 
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Time *</label>
+                    <input 
+                      type="time" 
+                      value={newEventData.time}
+                      onChange={(e) => setNewEventData({...newEventData, time: e.target.value})}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" 
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Location</label>
+                    <input 
+                      type="text" 
+                      value={newEventData.location}
+                      onChange={(e) => setNewEventData({...newEventData, location: e.target.value})}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" 
+                      placeholder="Enter location or 'Online'" 
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Max Participants</label>
+                    <input 
+                      type="number" 
+                      value={newEventData.maxParticipants}
+                      onChange={(e) => setNewEventData({...newEventData, maxParticipants: parseInt(e.target.value) || 100})}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" 
+                      min="1"
+                      max="10000"
+                    />
+                  </div>
+                  <div className="flex space-x-3">
+                    <button
+                      onClick={() => {
+                        setShowCreateModal(false);
+                        setNewEventData({
+                          name: "",
+                          type: "Conference",
+                          date: "",
+                          time: "",
+                          location: "",
+                          maxParticipants: 100
+                        });
+                      }}
+                      className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+                    >
+                      Cancel
+                    </button>
+                    <button 
+                      onClick={handleCreateEvent}
+                      className="flex-1 bg-gradient-to-r from-purple-600 to-pink-600 text-white px-4 py-2 rounded-lg hover:from-purple-700 hover:to-pink-700 transition-all duration-200"
+                    >
+                      Create Event
+                    </button>
+                  </div>
                 </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Event Type</label>
-                  <select className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
-                    <option>Tournament</option>
-                    <option>Course</option>
-                    <option>Conference</option>
-                    <option>Meetup</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Date</label>
-                  <input type="date" className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" />
-                </div>
-                <div className="flex space-x-3">
-                  <button
-                    onClick={() => setShowCreateModal(false)}
-                    className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
-                  >
-                    Cancel
-                  </button>
-                  <button 
-                    onClick={handleCreateEvent}
-                    className="flex-1 bg-gradient-to-r from-purple-600 to-pink-600 text-white px-4 py-2 rounded-lg hover:from-purple-700 hover:to-pink-700 transition-all duration-200"
-                  >
-                    Create Event
-                  </button>
-                </div>
-              </div>
             </motion.div>
           </motion.div>
         )}
@@ -653,66 +743,77 @@ export default function SigniumDashboard() {
                 <h2 className="text-xl font-bold text-gray-900 mb-4">Edit Event</h2>
                 <div className="space-y-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Event Name</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Event Name *</label>
                     <input 
                       type="text" 
+                      value={editEventData.name}
+                      onChange={(e) => setEditEventData({...editEventData, name: e.target.value})}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" 
-                      defaultValue={selectedEvent.name}
                     />
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">Event Type</label>
-                    <select className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
-                      <option value="Tournament" selected={selectedEvent.type === 'Tournament'}>Tournament</option>
-                      <option value="Course" selected={selectedEvent.type === 'Course'}>Course</option>
-                      <option value="Conference" selected={selectedEvent.type === 'Conference'}>Conference</option>
-                      <option value="Meetup" selected={selectedEvent.type === 'Meetup'}>Meetup</option>
+                    <select 
+                      value={editEventData.type}
+                      onChange={(e) => setEditEventData({...editEventData, type: e.target.value})}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                    >
+                      <option value="Tournament">Tournament</option>
+                      <option value="Course">Course</option>
+                      <option value="Conference">Conference</option>
+                      <option value="Meetup">Meetup</option>
                     </select>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Date</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Date *</label>
                     <input 
                       type="date" 
+                      value={editEventData.date}
+                      onChange={(e) => setEditEventData({...editEventData, date: e.target.value})}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" 
-                      defaultValue={selectedEvent.date}
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Time</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Time *</label>
                     <input 
                       type="time" 
+                      value={editEventData.time}
+                      onChange={(e) => setEditEventData({...editEventData, time: e.target.value})}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" 
-                      defaultValue={selectedEvent.time}
                     />
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">Location</label>
                     <input 
                       type="text" 
+                      value={editEventData.location}
+                      onChange={(e) => setEditEventData({...editEventData, location: e.target.value})}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" 
-                      defaultValue={selectedEvent.location}
                     />
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">Max Participants</label>
                     <input 
                       type="number" 
+                      value={editEventData.maxParticipants}
+                      onChange={(e) => setEditEventData({...editEventData, maxParticipants: parseInt(e.target.value) || 100})}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" 
-                      defaultValue={selectedEvent.maxParticipants}
+                      min="1"
+                      max="10000"
                     />
                   </div>
                   <div className="flex space-x-3">
                     <button
-                      onClick={() => setShowEditModal(false)}
+                      onClick={() => {
+                        setShowEditModal(false);
+                        setSelectedEvent(null);
+                      }}
                       className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
                     >
                       Cancel
                     </button>
                     <button 
-                      onClick={() => {
-                        alert('Event updated successfully!');
-                        setShowEditModal(false);
-                      }}
+                      onClick={handleUpdateEvent}
                       className="flex-1 bg-gradient-to-r from-purple-600 to-pink-600 text-white px-4 py-2 rounded-lg hover:from-purple-700 hover:to-pink-700 transition-all duration-200"
                     >
                       Update Event

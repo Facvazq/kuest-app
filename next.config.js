@@ -1,9 +1,25 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    unoptimized: true
+    domains: ['images.unsplash.com'],
   },
-  trailingSlash: false
+  async redirects() {
+    return [
+      {
+        source: '/signium/app',
+        destination: '/signium/dashboard',
+        permanent: true,
+      },
+    ]
+  },
+  async rewrites() {
+    return [
+      {
+        source: '/api/events/:path*',
+        destination: '/api/events/:path*',
+      },
+    ]
+  },
 }
 
 module.exports = nextConfig
