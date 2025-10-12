@@ -34,13 +34,13 @@ export default function HomePage() {
       description: "Perfect for individuals and small teams",
       features: [
         "Access to Kuest (Quiz Builder)",
-        "Access to Signium (Tournament Platform)",
+        "Access to Signium (Event Platform)",
+        "2 active events per month",
+        "Up to 50 signups per month",
         "Basic analytics dashboard",
         "Community support",
-        "Standard integrations",
         "Mobile app access",
-        "Basic reporting",
-        "Up to 3 team members"
+        "Basic reporting"
       ],
       popular: false,
       color: "from-blue-500 to-blue-600"
@@ -52,13 +52,13 @@ export default function HomePage() {
       description: "Ideal for growing businesses and teams",
       features: [
         "Access to all Fac Systems apps",
-        "Advanced analytics & insights",
+        "Unlimited events",
+        "Unlimited signups",
+        "Custom branding (logo, colors)",
+        "Remove Signium branding",
+        "Accept payments for events",
+        "Advanced analytics dashboard",
         "Priority support",
-        "Custom integrations",
-        "Advanced reporting",
-        "API access",
-        "White-label options",
-        "Up to 25 team members",
         "Advanced tournament features",
         "Custom quiz templates"
       ],
@@ -73,16 +73,16 @@ export default function HomePage() {
       features: [
         "Access to all Fac Systems apps",
         "Unlimited team members",
-        "Custom analytics suite",
+        "Team management",
+        "Advanced analytics suite",
         "24/7 dedicated support",
-        "Full API access",
         "Custom development",
-        "SLA guarantee",
         "On-premise deployment",
         "Advanced security",
         "Custom branding",
         "Dedicated account manager",
-        "Training & onboarding"
+        "Training & onboarding",
+        "White-label options"
       ],
       popular: false,
       color: "from-green-500 to-green-600"
@@ -158,8 +158,8 @@ export default function HomePage() {
                 <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
                   Fac Systems
                 </h1>
-              </div>
-            </div>
+        </div>
+          </div>
             <div className="hidden md:block">
               <div className="ml-10 flex items-baseline space-x-8">
                 <a href="#services" className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors">Services</a>
@@ -167,15 +167,15 @@ export default function HomePage() {
                 <a href="#pricing" className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors">Pricing</a>
                 <a href="#about" className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors">About</a>
                 <a href="#contact" className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors">Contact</a>
-                <button
+              <button
                   onClick={scrollToContact}
                   className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-2 rounded-lg font-medium hover:from-blue-700 hover:to-purple-700 transition-all duration-200 shadow-lg hover:shadow-xl"
-                >
+              >
                   Get Started
-                </button>
+              </button>
+                </div>
+                </div>
               </div>
-            </div>
-          </div>
         </div>
       </nav>
 
@@ -183,7 +183,7 @@ export default function HomePage() {
       <section className="pt-24 pb-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <div className="text-center">
-            <motion.div
+          <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
@@ -199,18 +199,18 @@ export default function HomePage() {
                 Join 500+ companies that trust us with their digital transformation.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-                <button
+              <button
                   onClick={scrollToContact}
                   className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-4 rounded-xl font-semibold text-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105"
-                >
+              >
                   Start Your Journey
                   <ArrowRight className="ml-2 w-5 h-5 inline" />
-                </button>
+              </button>
                 <button className="border-2 border-gray-300 text-gray-700 px-8 py-4 rounded-xl font-semibold text-lg hover:border-blue-600 hover:text-blue-600 transition-all duration-200">
                   Watch Demo
                 </button>
               </div>
-            </motion.div>
+                </motion.div>
           </div>
         </div>
       </section>
@@ -222,20 +222,20 @@ export default function HomePage() {
             <h2 className="text-4xl font-bold text-gray-900 mb-4">Global Reach</h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               Serving businesses and individuals across the globe with our innovative technology solutions
-            </p>
-          </div>
-          
+                  </p>
+                </div>
+                
           {/* Animated Globe */}
           <div className="mb-16">
             <AnimatedGlobe />
-          </div>
+                </div>
 
           {/* Stats Grid */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {stats.map((stat, index) => (
-              <motion.div
+        <motion.div
                 key={index}
-                initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
                 className="text-center"
@@ -245,7 +245,7 @@ export default function HomePage() {
                   <div className="text-3xl font-bold text-gray-900 mb-1">{stat.number}</div>
                   <div className="text-gray-600 font-medium">{stat.label}</div>
                 </div>
-              </motion.div>
+          </motion.div>
             ))}
           </div>
         </div>
@@ -262,25 +262,25 @@ export default function HomePage() {
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             {services.map((service, index) => (
-              <motion.div
+          <motion.div
                 key={index}
-                initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
                 className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100"
               >
                 <div className="bg-gradient-to-r from-blue-500 to-purple-500 rounded-xl p-4 w-16 h-16 flex items-center justify-center mb-6">
                   <service.icon className="w-8 h-8 text-white" />
-                </div>
+              </div>
                 <h3 className="text-xl font-bold text-gray-900 mb-4">{service.title}</h3>
                 <p className="text-gray-600 mb-4">{service.description}</p>
                 <div className="text-sm font-semibold text-blue-600 bg-blue-50 px-3 py-1 rounded-full inline-block">
                   {service.stats}
                 </div>
-              </motion.div>
+          </motion.div>
             ))}
-          </div>
         </div>
+      </div>
       </section>
 
       {/* Tools Section */}
@@ -302,10 +302,10 @@ export default function HomePage() {
             >
               <div className="absolute top-0 right-0 bg-orange-500 text-white px-3 py-1 text-sm font-semibold rounded-bl-lg">
                 Under Construction
-              </div>
+                    </div>
               <div className="bg-gradient-to-r from-green-500 to-blue-500 rounded-xl p-4 w-16 h-16 flex items-center justify-center mb-6">
                 <Gamepad2 className="w-8 h-8 text-white" />
-              </div>
+                  </div>
               <h3 className="text-2xl font-bold text-gray-900 mb-4">Kuest</h3>
               <p className="text-gray-600 mb-6">
                 Interactive quiz builder that lets you create engaging quizzes, surveys, and assessments. 
@@ -315,11 +315,11 @@ export default function HomePage() {
                 <div className="flex items-center text-sm text-gray-600">
                   <Check className="w-4 h-4 text-green-500 mr-2" />
                   <span>Drag & drop quiz builder</span>
-                </div>
+                  </div>
                 <div className="flex items-center text-sm text-gray-600">
                   <Check className="w-4 h-4 text-green-500 mr-2" />
                   <span>Real-time analytics dashboard</span>
-                </div>
+                  </div>
                 <div className="flex items-center text-sm text-gray-600">
                   <Check className="w-4 h-4 text-green-500 mr-2" />
                   <span>Custom branding & themes</span>
@@ -329,13 +329,13 @@ export default function HomePage() {
                   <span>Multi-language support</span>
                 </div>
               </div>
-              <button className="w-full bg-gradient-to-r from-green-500 to-blue-500 text-white py-3 px-6 rounded-lg font-semibold hover:from-green-600 hover:to-blue-600 transition-all duration-200 opacity-50 cursor-not-allowed">
-                Coming Soon
-              </button>
+              <Link href="/signium" className="w-full bg-gradient-to-r from-green-500 to-blue-500 text-white py-3 px-6 rounded-lg font-semibold hover:from-green-600 hover:to-blue-600 transition-all duration-200 text-center block">
+                Try Kuest
+              </Link>
             </motion.div>
 
             {/* Signium Tool */}
-            <motion.div
+                  <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.1 }}
@@ -343,10 +343,10 @@ export default function HomePage() {
             >
               <div className="absolute top-0 right-0 bg-orange-500 text-white px-3 py-1 text-sm font-semibold rounded-bl-lg">
                 Under Construction
-              </div>
+                      </div>
               <div className="bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl p-4 w-16 h-16 flex items-center justify-center mb-6">
                 <Trophy className="w-8 h-8 text-white" />
-              </div>
+                    </div>
               <h3 className="text-2xl font-bold text-gray-900 mb-4">Signium</h3>
               <p className="text-gray-600 mb-6">
                 Tournament and conquest platform that allows you to create competitive events, manage participants, 
@@ -360,7 +360,7 @@ export default function HomePage() {
                 <div className="flex items-center text-sm text-gray-600">
                   <Check className="w-4 h-4 text-green-500 mr-2" />
                   <span>Player registration system</span>
-                </div>
+              </div>
                 <div className="flex items-center text-sm text-gray-600">
                   <Check className="w-4 h-4 text-green-500 mr-2" />
                   <span>Live score tracking</span>
@@ -370,12 +370,12 @@ export default function HomePage() {
                   <span>Prize & reward management</span>
                 </div>
               </div>
-              <button className="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white py-3 px-6 rounded-lg font-semibold hover:from-purple-600 hover:to-pink-600 transition-all duration-200 opacity-50 cursor-not-allowed">
-                Coming Soon
-              </button>
+              <Link href="/signium" className="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white py-3 px-6 rounded-lg font-semibold hover:from-purple-600 hover:to-pink-600 transition-all duration-200 text-center block">
+                Try Signium
+              </Link>
             </motion.div>
-          </div>
-        </div>
+                    </div>
+                  </div>
       </section>
 
       {/* About Section */}
@@ -393,11 +393,11 @@ export default function HomePage() {
                 <div className="flex items-center">
                   <Check className="w-6 h-6 text-green-500 mr-3" />
                   <span className="text-gray-700">Award-winning development team</span>
-                </div>
+                  </div>
                 <div className="flex items-center">
                   <Check className="w-6 h-6 text-green-500 mr-3" />
                   <span className="text-gray-700">99.9% uptime guarantee</span>
-                </div>
+                  </div>
                 <div className="flex items-center">
                   <Check className="w-6 h-6 text-green-500 mr-3" />
                   <span className="text-gray-700">24/7 dedicated support</span>
@@ -405,9 +405,9 @@ export default function HomePage() {
                 <div className="flex items-center">
                   <Check className="w-6 h-6 text-green-500 mr-3" />
                   <span className="text-gray-700">Custom solutions for every need</span>
+                      </div>
+                    </div>
                 </div>
-              </div>
-            </div>
             <div className="relative">
               <div className="bg-gradient-to-r from-blue-500 to-purple-500 rounded-2xl p-8 text-white">
                 <h3 className="text-2xl font-bold mb-6">Our Impact</h3>
@@ -415,7 +415,7 @@ export default function HomePage() {
                   <div className="flex justify-between items-center">
                     <span>Client Satisfaction</span>
                     <span className="font-bold">98%</span>
-                  </div>
+              </div>
                   <div className="flex justify-between items-center">
                     <span>Project Success Rate</span>
                     <span className="font-bold">95%</span>
@@ -427,12 +427,12 @@ export default function HomePage() {
                   <div className="flex justify-between items-center">
                     <span>Time to Market Reduction</span>
                     <span className="font-bold">60%</span>
-                  </div>
-                </div>
+                     </div>
+                   </div>
               </div>
-            </div>
-          </div>
-        </div>
+                    </div>
+                  </div>
+                  </div>
       </section>
 
       {/* Pricing Section */}
@@ -474,8 +474,8 @@ export default function HomePage() {
                       <Check className="w-5 h-5 text-green-500 mr-3 flex-shrink-0" />
                       <span className="text-gray-700">{feature}</span>
                     </li>
-                  ))}
-                </ul>
+                        ))}
+                      </ul>
                 <button
                   className={`w-full py-3 px-6 rounded-lg font-semibold transition-all duration-200 ${
                     plan.popular
@@ -485,10 +485,10 @@ export default function HomePage() {
                 >
                   Get Started
                 </button>
-              </motion.div>
+                  </motion.div>
             ))}
-          </div>
-        </div>
+                </div>
+              </div>
       </section>
 
       {/* Testimonials Section */}
@@ -502,7 +502,7 @@ export default function HomePage() {
           </div>
           <div className="grid md:grid-cols-3 gap-8">
             {testimonials.map((testimonial, index) => (
-              <motion.div
+                <motion.div
                 key={index}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -513,16 +513,16 @@ export default function HomePage() {
                   {[...Array(testimonial.rating)].map((_, i) => (
                     <Star key={i} className="w-5 h-5 text-yellow-400 fill-current" />
                   ))}
-                </div>
+              </div>
                 <p className="text-gray-700 mb-6 italic">&quot;{testimonial.content}&quot;</p>
                 <div>
                   <div className="font-semibold text-gray-900">{testimonial.name}</div>
                   <div className="text-gray-600 text-sm">{testimonial.role}</div>
                   <div className="text-blue-600 text-sm font-medium">{testimonial.company}</div>
-                </div>
-              </motion.div>
+            </div>
+          </motion.div>
             ))}
-          </div>
+      </div>
         </div>
       </section>
 
@@ -558,21 +558,21 @@ export default function HomePage() {
                   >
                     Send Email
                   </button>
-                </div>
+                  </div>
                 <div className="mt-6 text-sm text-gray-500">
                   Email: hello@facsystems.com
                 </div>
+                </div>
               </div>
-            </div>
-          </div>
-        </div>
+                    </div>
+                  </div>
       </section>
 
       {/* Footer */}
       <footer className="bg-gray-900 text-white py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-4 gap-8">
-            <div>
+                    <div>
               <h3 className="text-2xl font-bold mb-4">Fac Systems</h3>
               <p className="text-gray-400 mb-4">
                 Transforming businesses through innovative technology solutions.
@@ -580,12 +580,12 @@ export default function HomePage() {
               <div className="flex space-x-4">
                 <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center">
                   <Globe className="w-4 h-4" />
-                </div>
+                    </div>
                 <div className="w-8 h-8 bg-purple-600 rounded-full flex items-center justify-center">
                   <Smartphone className="w-4 h-4" />
-                </div>
-              </div>
-            </div>
+                  </div>
+                    </div>
+                  </div>
             <div>
               <h4 className="font-semibold mb-4">Services</h4>
               <ul className="space-y-2 text-gray-400">
@@ -594,8 +594,8 @@ export default function HomePage() {
                 <li>System Integration</li>
                 <li>Business Intelligence</li>
               </ul>
-            </div>
-            <div>
+                </div>
+                  <div>
               <h4 className="font-semibold mb-4">Company</h4>
               <ul className="space-y-2 text-gray-400">
                 <li>About Us</li>
@@ -603,20 +603,20 @@ export default function HomePage() {
                 <li>Contact</li>
                 <li>Privacy Policy</li>
               </ul>
-            </div>
-            <div>
+                    </div>
+                  <div>
               <h4 className="font-semibold mb-4">Contact</h4>
               <ul className="space-y-2 text-gray-400">
                 <li>hello@facsystems.com</li>
                 <li>+1 (555) 123-4567</li>
                 <li>24/7 Support Available</li>
               </ul>
-            </div>
-          </div>
+                    </div>
+                  </div>
           <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
             <p>&copy; 2024 Fac Systems. All rights reserved.</p>
-          </div>
-        </div>
+                </div>
+              </div>
       </footer>
     </div>
   );
