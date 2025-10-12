@@ -35,12 +35,26 @@ import {
   MessageSquare
 } from 'lucide-react';
 
+interface Event {
+  id: number;
+  name: string;
+  type: string;
+  date: string;
+  time: string;
+  location: string;
+  participants: number;
+  maxParticipants: number;
+  status: string;
+  coverImage: string;
+}
+
 export default function SigniumDashboard() {
   const [activeTab, setActiveTab] = useState('events');
   const [showCreateModal, setShowCreateModal] = useState(false);
-  const [selectedEvent, setSelectedEvent] = useState(null);
-
-  const events = [
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
+  const [events, setEvents] = useState([
     {
       id: 1,
       name: "Tech Conference 2024",
@@ -77,7 +91,56 @@ export default function SigniumDashboard() {
       status: "active",
       coverImage: "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=400&h=200&fit=crop"
     }
-  ];
+  ]);
+
+  // Event handlers
+  const handleEditEvent = (event: Event) => {
+    setSelectedEvent(event);
+    setShowEditModal(true);
+  };
+
+  const handleDeleteEvent = (event: Event) => {
+    setSelectedEvent(event);
+    setShowDeleteModal(true);
+  };
+
+  const confirmDeleteEvent = () => {
+    if (selectedEvent) {
+      setEvents(events.filter(event => event.id !== selectedEvent.id));
+      setShowDeleteModal(false);
+      setSelectedEvent(null);
+    }
+  };
+
+  const handleViewEvent = (event: Event) => {
+    // Navigate to event details page or show event info
+    alert(`Viewing event: ${event.name}`);
+  };
+
+  const handleShareEvent = (event: Event) => {
+    // Copy event link to clipboard
+    const eventLink = `https://signium.app/event/${event.id}`;
+    navigator.clipboard.writeText(eventLink);
+    alert(`Event link copied to clipboard: ${eventLink}`);
+  };
+
+  const handleCreateEvent = () => {
+    // Add new event logic here
+    const newEvent: Event = {
+      id: Date.now(),
+      name: "New Event",
+      type: "Conference",
+      date: "2024-04-15",
+      time: "10:00",
+      location: "TBD",
+      participants: 0,
+      maxParticipants: 100,
+      status: "active",
+      coverImage: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=400&h=200&fit=crop"
+    };
+    setEvents([...events, newEvent]);
+    setShowCreateModal(false);
+  };
 
   const analytics = {
     totalEvents: 12,
@@ -247,7 +310,7 @@ export default function SigniumDashboard() {
                       <h2 className="text-xl font-bold text-gray-900">Your Events</h2>
                       <button
                         onClick={() => setShowCreateModal(true)}
-                        className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-4 py-2 rounded-lg font-medium hover:from-purple-700 hover:to-pink-700 transition-all duration-200 flex items-center"
+                        className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-4 py-2 rounded-lg font-medium hover:from-purple-700 hover:to-pink-700 transition-all duration-200 flex items-center shadow-lg hover:shadow-xl transform hover:scale-105"
                       >
                         <Plus className="w-4 h-4 mr-2" />
                         Create Event
@@ -302,16 +365,32 @@ export default function SigniumDashboard() {
                                 </div>
                               </div>
                               <div className="flex items-center space-x-2">
-                                <button className="p-2 text-gray-400 hover:text-gray-600">
+                                <button 
+                                  onClick={() => handleViewEvent(event)}
+                                  className="p-2 text-gray-400 hover:text-gray-600 transition-colors"
+                                  title="View Event"
+                                >
                                   <Eye className="w-4 h-4" />
                                 </button>
-                                <button className="p-2 text-gray-400 hover:text-gray-600">
+                                <button 
+                                  onClick={() => handleEditEvent(event)}
+                                  className="p-2 text-gray-400 hover:text-blue-600 transition-colors"
+                                  title="Edit Event"
+                                >
                                   <Edit className="w-4 h-4" />
                                 </button>
-                                <button className="p-2 text-gray-400 hover:text-gray-600">
+                                <button 
+                                  onClick={() => handleShareEvent(event)}
+                                  className="p-2 text-gray-400 hover:text-green-600 transition-colors"
+                                  title="Share Event"
+                                >
                                   <Share2 className="w-4 h-4" />
                                 </button>
-                                <button className="p-2 text-gray-400 hover:text-red-600">
+                                <button 
+                                  onClick={() => handleDeleteEvent(event)}
+                                  className="p-2 text-gray-400 hover:text-red-600 transition-colors"
+                                  title="Delete Event"
+                                >
                                   <Trash2 className="w-4 h-4" />
                                 </button>
                               </div>
@@ -424,19 +503,37 @@ export default function SigniumDashboard() {
             <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
               <h3 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
               <div className="space-y-3">
-                <button className="w-full flex items-center p-3 text-left hover:bg-gray-50 rounded-lg transition-colors">
+                <button 
+                  onClick={() => setShowCreateModal(true)}
+                  className="w-full flex items-center p-3 text-left hover:bg-gray-50 rounded-lg transition-colors"
+                >
                   <Plus className="w-5 h-5 text-purple-600 mr-3" />
                   <span className="text-gray-700">Create New Event</span>
                 </button>
-                <button className="w-full flex items-center p-3 text-left hover:bg-gray-50 rounded-lg transition-colors">
+                <button 
+                  onClick={() => {
+                    setActiveTab('participants');
+                    alert('Navigate to participant invitation');
+                  }}
+                  className="w-full flex items-center p-3 text-left hover:bg-gray-50 rounded-lg transition-colors"
+                >
                   <Users className="w-5 h-5 text-blue-600 mr-3" />
                   <span className="text-gray-700">Invite Participants</span>
                 </button>
-                <button className="w-full flex items-center p-3 text-left hover:bg-gray-50 rounded-lg transition-colors">
+                <button 
+                  onClick={() => {
+                    setActiveTab('analytics');
+                    alert('Navigate to analytics dashboard');
+                  }}
+                  className="w-full flex items-center p-3 text-left hover:bg-gray-50 rounded-lg transition-colors"
+                >
                   <BarChart3 className="w-5 h-5 text-green-600 mr-3" />
                   <span className="text-gray-700">View Analytics</span>
                 </button>
-                <button className="w-full flex items-center p-3 text-left hover:bg-gray-50 rounded-lg transition-colors">
+                <button 
+                  onClick={() => alert('AI Assistant: How can I help you optimize your events today?')}
+                  className="w-full flex items-center p-3 text-left hover:bg-gray-50 rounded-lg transition-colors"
+                >
                   <Bot className="w-5 h-5 text-pink-600 mr-3" />
                   <span className="text-gray-700">AI Assistant</span>
                 </button>
@@ -470,7 +567,10 @@ export default function SigniumDashboard() {
               <p className="text-sm text-gray-600 mb-4">
                 Get suggestions for better event titles, descriptions, and optimal timing.
               </p>
-              <button className="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white py-2 px-4 rounded-lg font-medium hover:from-purple-700 hover:to-pink-700 transition-all duration-200">
+              <button 
+                onClick={() => alert('AI Assistant: I can help you with:\n\n• Optimize event titles and descriptions\n• Suggest best times for your events\n• Generate social media captions\n• Analyze participant engagement\n• Detect potential spam signups\n\nWhat would you like help with?')}
+                className="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white py-2 px-4 rounded-lg font-medium hover:from-purple-700 hover:to-pink-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105"
+              >
                 Ask AI Assistant
               </button>
             </div>
@@ -521,7 +621,10 @@ export default function SigniumDashboard() {
                   >
                     Cancel
                   </button>
-                  <button className="flex-1 bg-gradient-to-r from-purple-600 to-pink-600 text-white px-4 py-2 rounded-lg hover:from-purple-700 hover:to-pink-700 transition-all duration-200">
+                  <button 
+                    onClick={handleCreateEvent}
+                    className="flex-1 bg-gradient-to-r from-purple-600 to-pink-600 text-white px-4 py-2 rounded-lg hover:from-purple-700 hover:to-pink-700 transition-all duration-200"
+                  >
                     Create Event
                   </button>
                 </div>
@@ -529,6 +632,142 @@ export default function SigniumDashboard() {
             </motion.div>
           </motion.div>
         )}
+
+        {/* Edit Event Modal */}
+        <AnimatePresence>
+          {showEditModal && selectedEvent && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50"
+              onClick={() => setShowEditModal(false)}
+            >
+              <motion.div
+                initial={{ scale: 0.9, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.9, opacity: 0 }}
+                className="bg-white rounded-2xl p-6 w-full max-w-md"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <h2 className="text-xl font-bold text-gray-900 mb-4">Edit Event</h2>
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Event Name</label>
+                    <input 
+                      type="text" 
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" 
+                      defaultValue={selectedEvent.name}
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Event Type</label>
+                    <select className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                      <option value="Tournament" selected={selectedEvent.type === 'Tournament'}>Tournament</option>
+                      <option value="Course" selected={selectedEvent.type === 'Course'}>Course</option>
+                      <option value="Conference" selected={selectedEvent.type === 'Conference'}>Conference</option>
+                      <option value="Meetup" selected={selectedEvent.type === 'Meetup'}>Meetup</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Date</label>
+                    <input 
+                      type="date" 
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" 
+                      defaultValue={selectedEvent.date}
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Time</label>
+                    <input 
+                      type="time" 
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" 
+                      defaultValue={selectedEvent.time}
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Location</label>
+                    <input 
+                      type="text" 
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" 
+                      defaultValue={selectedEvent.location}
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Max Participants</label>
+                    <input 
+                      type="number" 
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" 
+                      defaultValue={selectedEvent.maxParticipants}
+                    />
+                  </div>
+                  <div className="flex space-x-3">
+                    <button
+                      onClick={() => setShowEditModal(false)}
+                      className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+                    >
+                      Cancel
+                    </button>
+                    <button 
+                      onClick={() => {
+                        alert('Event updated successfully!');
+                        setShowEditModal(false);
+                      }}
+                      className="flex-1 bg-gradient-to-r from-purple-600 to-pink-600 text-white px-4 py-2 rounded-lg hover:from-purple-700 hover:to-pink-700 transition-all duration-200"
+                    >
+                      Update Event
+                    </button>
+                  </div>
+                </div>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Delete Confirmation Modal */}
+        <AnimatePresence>
+          {showDeleteModal && selectedEvent && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50"
+              onClick={() => setShowDeleteModal(false)}
+            >
+              <motion.div
+                initial={{ scale: 0.9, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.9, opacity: 0 }}
+                className="bg-white rounded-2xl p-6 w-full max-w-md"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <div className="text-center">
+                  <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Trash2 className="w-8 h-8 text-red-600" />
+                  </div>
+                  <h2 className="text-xl font-bold text-gray-900 mb-2">Delete Event</h2>
+                  <p className="text-gray-600 mb-6">
+                    Are you sure you want to delete &quot;{selectedEvent.name}&quot;? This action cannot be undone.
+                  </p>
+                  <div className="flex space-x-3">
+                    <button
+                      onClick={() => setShowDeleteModal(false)}
+                      className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+                    >
+                      Cancel
+                    </button>
+                    <button 
+                      onClick={confirmDeleteEvent}
+                      className="flex-1 bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-all duration-200"
+                    >
+                      Delete Event
+                    </button>
+                  </div>
+                </div>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </AnimatePresence>
     </div>
   );
